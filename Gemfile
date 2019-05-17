@@ -70,6 +70,9 @@ gem 'mini_magick'
 gem 'imgkit'
 # https://cloud.google.com/natural-language/docs/basics#sentiment_analysis
 gem 'google-cloud-language'
+# apparently we need this to deploy to heroku
+# https://stackoverflow.com/questions/34171147/rails-couldnt-find-file-jquery-ujs-with-type-application-javascript
+gem 'jquery-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
