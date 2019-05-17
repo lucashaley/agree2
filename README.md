@@ -1,24 +1,15 @@
-# README
+# We Agree That…
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+We Agree That… is an experiment in crowd-sourced axiomatic opinion.
 
-Things you may want to cover:
+## Heroku Deployment
 
-* Ruby version
+This is also my first experiment in deploying to Heroku.
 
-* System dependencies
+### My own notes:
 
-* Configuration
+* remember to login to Heroku in the CL by using `heroku login`
 
-* Database creation
+## Some things
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Ruby version 2.4.0 for now
