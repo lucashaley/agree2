@@ -1,0 +1,39 @@
+<%= form_for(@statement, url: statement_children_path) do |f| %>
+  <% if statement.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(statement.errors.count, "error") %> prohibited this statement from being saved:</h2>
+
+      <ul>
+      <% statement.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :content %>
+    <%= f.text_area :content %>
+  </div>
+
+  <div class="field">
+    <%= f.label :tag_list %>
+    <%= f.text_field :tag_list, value: f.object.tag_list.to_s %>
+  </div>
+
+  <div class="field">
+    <%= f.label :author_id %>
+    <%= f.text_field :author_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :parent_id %>
+    <%= f.text_field :parent_id %>
+  </div>
+
+  <%= f.hidden_field :statement_parent_id, :value => @parent.id %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

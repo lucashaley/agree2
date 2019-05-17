@@ -1,0 +1,33 @@
+// Place all the styles related to the Statements controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#statement {
+  font-family: serif, cursive;
+  font-size: 48px;
+  font-style: italic;
+  text-align: center;
+  line-height: 1.2em;
+}
+
+#author {
+  font-size: 24px;
+  text-align: right;
+  text-decoration: none;
+  color: silver;
+}
+
+#author a {
+  text-decoration: none;
+  color: silver;
+}
+
+#tags {
+  display: block;
+  text-align: center;
+}
+
+#tags a {
+  text-decoration: none;
+  padding: 0.4em;
+}

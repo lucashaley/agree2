@@ -1,0 +1,77 @@
+
+
+<p id="notice"><%= notice %></p>
+
+<h1>Categories</h1>
+
+<% tag_cloud(@tags, %w(css1 css2 css3 css4)) do |tag, css_class| %>
+  <%# link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
+  <%= link_to tag.name, tag_path(tag.name), class: "btn btn-default btn-sm", role: "button" %>
+<% end %>
+
+<h1>Statements</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Content</th>
+      <th>Votes</th>
+      <th>Parent</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @statements.each do |statement| %>
+      <tr>
+        <td><%= statement.content %></td>
+        <td><%= statement.votes_for %></td>
+        <td><%= statement.parent %></td>
+        <td><%= link_to 'Show', statement %></td>
+        <td><%= link_to 'Edit', edit_statement_path(statement) %></td>
+        <td><%= link_to 'Destroy', statement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Statement', new_statement_path %>
+<div class="row">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <h2>Most Recent</h2>
+        <div class="list-group">
+          <%= render partial: "listitem", collection: @most_recent, as: :statement %>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-12">
+        <h2>Most Variants</h2>
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <h2>Top Statements</h2>
+        <div class="list-group">
+          <%= render partial: "listitem", collection: @top_ten, as: :statement %>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-12">
+        <h2>Most Discussed</h2>
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

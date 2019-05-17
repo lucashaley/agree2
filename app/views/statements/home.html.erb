@@ -1,0 +1,92 @@
+<div class="jumbotron">
+  <h3>
+  <% if @statement.votes_for > 2 %>
+    <% if @agreed %>
+    You and <%= @statement.votes_for - 1 %> people agree that…
+    <% else %>
+    <%= @statement.votes_for %> people agree that…
+    <% end %>
+  <% elsif @statement.votes_for == 2 %>
+    <% if @agreed %>
+    You and 1 other person agree that…
+    <% else %>
+    Two people agree that…
+    <% end %>
+  <% elsif @statement.votes_for == 1 %>
+    <% if @agreed %>
+    You are the only person to agree that…
+    <% else %>
+    One person agrees that…
+    <% end %>
+  <% else %>
+    Nobody yet agrees that…
+  <% end %>
+  </h3>
+  <h1>…<%= @statement.content %></h1>
+  <div class="row">
+    <div class="col-xs-6">
+      <% if @agreed %>
+      <%= link_to('Unagree', disagree_statement_path(@statement), :method => :post, class: "btn btn-danger btn-lg") %>
+      <% else %>
+      <%= link_to('Agree', agree_statement_path(@statement), :method => :post, class: "btn btn-success btn-lg") %>
+      <% end %>
+      <a class="btn btn-info btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create New</a>
+    </div>
+    <div class="col-xs-6 text-right">
+      <a class="btn btn-warning btn-lg" role="button">Report</a>
+    </div>
+  </div>
+  <p>
+  <% if @agreed %>
+  <%= link_to('Unagree', disagree_statement_path(@statement), :method => :post, class: "btn btn-danger btn-lg") %>
+  <% else %>
+  <%= link_to('Agree', agree_statement_path(@statement), :method => :post, class: "btn btn-success btn-lg") %>
+  <% end %>
+  <a class="btn btn-info btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create New</a>
+  </p>
+
+  <div class="collapse" id="new_child">
+    <div class="well text-center">
+      <%= form_for @new, url: statements_create_root_path, method: 'post' do |f| %>
+      <div class="field">
+        <%= f.text_area :content, :cols => 40, :rows => 2 %>
+      </div>
+      <div class="field">
+        <%= f.label :tag_list %>
+        <%= f.text_field :tag_list, size: 80 %>
+      </div>
+      <%= f.submit "Submit new statement", class: "btn btn-success btn-lg" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <h2>We Agree That… is an experiment in crowd-sourced axoims.</h2>
+    <p class="lead">Despite the recent trend in polarization of politics, I believe that we, as an entire world, <mark>agree on more than we disagree on</mark>.</p>
+    <p class="lead">The media and policitians benefit from increasing that polarization, making us believe that we are irreconcilably different.</p>
+    <h3>This site hopes to show that we have more in common than we have in difference.</h3>
+    <p class="lead">We invite you to browse submitted statements, refine existing statements, or create new ones.</p>
+    <p class="lead">You can <i>agree</i> to any statement, increasing its status. But keep in mind that if you agree to a statement, any agrees further up that statement's ancestry is removed.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <h2>Top Statements</h2>
+        <div class="list-group">
+          <%= render partial: "listitem", collection: @top_ten, as: :statement %>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-12">
+        <h2>Most Discussed</h2>
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

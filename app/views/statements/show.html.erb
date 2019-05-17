@@ -1,0 +1,125 @@
+<% content_for :head do %>
+<meta property="og:url"                content='<%= request.original_url %>' />
+<meta property="og:type"               content="article" />
+<meta property="og:title"              content="We Can Agree" />
+<meta property="og:description"        content="A website dedicated to finding common ground." />
+<meta property="og:image"              content='<%= request.original_url + ".png" %>' />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@WeAgreeThat">
+<meta name="twitter:creator" content="@WeAgreeThat">
+<meta name="twitter:title" content="I agree that…">
+<meta name="twitter:description" content="<%= @statement.content %>">
+<meta name="twitter:image" content="<%= request.original_url + ".png" %>">
+<% end %>
+
+<div class="jumbotron">
+  <ul class="list-inline">
+  <% @statement.tags.each do |tag| %>
+    <li><%= link_to tag.name, tag_path(tag.name), class: "btn btn-default btn-sm", role: "button" %></li>
+  <% end %>
+  </ul>
+  <h3 id='like-post-container'>
+    <%= render partial: "agree", locals: {statement: @statement} %>
+  </h3>
+  <h1>…<%= @statement.content %></h1>
+  <div class="row">
+    <div class="collapse.show" id="agree_section">
+      <div class="col-xs-6">
+        <p>
+        <%= link_to @agreed ? 'Unagree' : 'Agree', toggle_agree_statement_path(@statement), type: 'button', id: "agree_btn", class: @css_string, "data-toggle"=>"button", "aria-pressed"=>"#{@agreed}", "data-agree-text"=>"Unagree", "data-unagree-text"=>"Agree", :method => :post, :remote => :true %>
+        <script>
+          $('#agree_btn').on('click', function () {
+            if ($(this).hasClass('active')){
+              $(this).button('unagree')
+            } else {
+              $(this).button('agree')
+            }
+          })
+        </script>
+        <a class="btn btn-primary btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create Variant</a>
+        </p>
+      </div>
+      <div class="col-xs-6 text-right">
+        <a id="shareBtn_facebook" class="btn btn-info btn-lg" role="button"><i class="fa fa-facebook-official"></i></a>
+        <script>
+          document.getElementById('shareBtn_facebook').onclick = function() {
+            FB.ui({
+              method: 'share',
+              display: 'popup',
+              href: 'http://localhost:3000/statements/13',
+            }, function(response){});
+          }
+        </script>
+        <a class="btn btn-info btn-lg" href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-text="I agree that <%= @statement.content %>" data-url="http://localhost:3000/statements/6" data-via="WeAgreeThat" data-hashtags="agree" data-show-count="false"><i class="fa fa-twitter"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <a class="btn btn-warning btn-lg" role="button">Report</a>
+      </div>
+    </div>
+  </div>
+  <div class="collapse" id="new_child">
+    <div class="well text-center">
+      <h3>Modify the text to improve it!</h3>
+      <%# form_with(model: @child) do |f| %>
+      <%= form_for(@child, url: create_child_statement_path) do |f| %>
+      <div class="field">
+        <%= f.text_area :content, :value => @statement.content, :cols => 40, :rows => 2 %>
+      </div>
+      <div class="field">
+        <%= f.label :tag_list %>
+        <%= f.text_field :tag_list, value: f.object.tag_list.to_s, size: 80 %>
+      </div>
+      <%= f.hidden_field :statement_parent_id, :value => @statement.id %>
+      <a class="btn btn-warning btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Cancel</a>
+      <%= f.submit "Submit variant and agree", class: "btn btn-success btn-lg" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<% if @statement.parent %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Version History</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6 text-left">
+        <h4>Parent version</h4>
+      </div>
+      <div class="col-md-6 text-left">
+        <h4>This version</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 text-left">
+        <%= @diff_left %>
+      </div>
+      <div class="col-md-6 text-left">
+        <%= @diff_right %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% if not @statement.leaf? %>
+<div class="row">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <h2>Variations</h2>
+        <div class="list-group">
+          <%= render partial: "listitem", collection: @statement.leaves, as: :statement %>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-12">
+        <h2>Most Discussed</h2>
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% end %>

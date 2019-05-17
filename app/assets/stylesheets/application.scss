@@ -1,0 +1,141 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ // "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+ @import "bootstrap-sprockets";
+ @import "bootstrap";
+
+/* Stuff for overall formatting and footer lock */
+html {
+  height: 100% !important;
+}
+
+body {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    height: 100%;
+}
+
+.content{
+	flex: 1 0 auto;
+	-webkit-flex: 1 0 auto;
+	min-height: 200px;
+}
+
+#agree_footer{
+	flex: 0 0 auto;
+    -webkit-flex: 0 0 auto;
+}
+
+/* Agree button toggle */
+#agree_btn.active {
+  background-color: #d9534f;
+  border-color: transparent;
+}
+
+#new_child textarea {
+  font-family: serif, cursive;
+  font-size: 32px;
+  font-style: italic;
+  text-align: center;
+  line-height: 1.2em;
+  padding: 6px;
+}
+
+/* Footer formatting */
+#agree_footer {
+	background-color: #e7e7e7;
+	color:#333;
+}
+
+#agree_footer .footer-copyright{
+	background-color: #333;
+	padding-top:3px;
+	padding-bottom:3px;
+	text-align: center;
+}
+
+#agree_footer .footer-copyright p{
+	margin:10px;
+	color: #ccc;
+}
+
+#agree_footer ul{
+	list-style-type: none;
+    padding-left: 0;
+    line-height: 1.7;
+
+}
+
+#agree_footer h5{
+	font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin-top: 30px;
+}
+
+#agree_footer a{
+	color:#333;
+	text-decoration: none;
+}
+
+#agree_footer a:hover, #agree_footer a:focus{
+	text-decoration: none;
+	// color:#333;
+}
+
+#agree_footer .myCols{
+	text-align: center;
+}
+
+#agree_footer .social-networks{
+	text-align: center;
+	padding-top: 30px;
+	padding-bottom: 38px;
+}
+
+#agree_footer .social-networks a{
+    font-size: 32px;
+    margin-right: 5px;
+    margin-left: 5px;
+    color: #333;
+    padding: 10px;
+    transition: 0.2s;
+}
+
+#agree_footer .social-networks a:hover{
+	text-decoration: none;
+}
+
+#agree_footer .facebook:hover{
+	color:#0077e2;
+}
+
+#agree_footer .google:hover{
+	color:#ef1a1a;
+}
+
+#agree_footer .twitter:hover{
+	color: #00aced;
+}
+
+@media screen and (max-width: 767px){
+	#agree_footer {
+		text-align: center;
+	}
+}

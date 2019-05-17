@@ -1,15 +1,155 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Agree2</title>
+    <title>We Agree That…</title>
     <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <% if content_for?(:head) %>
+      <%= yield(:head) %>
+    <% end %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <style type="text/css"><%= Diffy::CSS %></style>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId            : '712939042437614',
+          autoLogAppEvents : true,
+          xfbml            : true,
+          version          : 'v3.2'
+        });
+      };
+    </script>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="content">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">We Agree That…</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <!-- <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li> -->
+            <li><%= link_to("All Statements", statements_path) %></li>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/pages/faqs">FAQs</a></li>
+            <li><a href="/pages/support">Support</a></li>
+            <li><a href="/pages/donate">Donate</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <%= search_form_for @q, :url => search_statements_path(@q), class: 'navbar-form navbar-right' do |f| %>
+            <div class="form-group">
+            <%= f.search_field :content_cont, class: 'form-control' %>
+            </div>
+            <%= f.submit class: 'btn btn-default' %>
+          <% end %>
+
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="row full-width">
+        <p id="notice"><%= notice %></p>
+      </div>
+
+      <div class="row full-width">
+      <%= yield %>
+      </div>
+    </div>
+  </div>
+    <!-- div class="navbar navbar-inverse navbar-fixed-bottom" -->
+    <footer id="agree_footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3 myCols">
+                    <h5>Get started</h5>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Sign up</a></li>
+                        <li><a href="#">Downloads</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-3 myCols">
+                    <h5>About us</h5>
+                    <ul>
+                        <li><a href="#">Company Information</a></li>
+                        <li><a href="#">Contact us</a></li>
+                        <li><a href="#">Reviews</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-3 myCols">
+                    <h5>Support</h5>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Help desk</a></li>
+                        <li><a href="#">Forums</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-3 myCols">
+                    <h5>Legal</h5>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="social-networks">
+            <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+            <a href="#" class="facebook"><i class="fa fa-facebook-official"></i></a>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2019 We Agree That </p>
+        </div>
+    </footer>
+
+    <script>
+      setTimeout(function() {
+        $.getScript("https://cdn.jsdelivr.net/fingerprintjs2/1.0.3/fingerprint2.min.js", function() {
+          new Fingerprint2().get(function(result){
+            console.log(result);
+            // outputs "d42ad4b09e6c2e89814846ea6e81c1f3"
+            // document.querySelector("#details").textContent = result
+
+            $.ajax({
+              url: "/sessions/create",
+              data: {"fingerprint": result},
+              type: "POST",
+              success: function (data) {
+                console.log(data);
+              }
+            });
+          });
+        });
+      }, 500);
+
+    </script>
   </body>
 </html>

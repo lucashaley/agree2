@@ -1,0 +1,3 @@
+<%= link_to statement_path(statement), class: "list-group-item list-group-item-action" do %>
+  <%= statement.content.capitalize %><span class="badge"><%= statement.votes_for %></span>
+<% end %>

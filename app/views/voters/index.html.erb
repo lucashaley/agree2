@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Voters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @voters.each do |voter| %>
+      <tr>
+        <td><%= voter.name %></td>
+        <td><%= link_to 'Show', voter %></td>
+        <td><%= link_to 'Edit', edit_voter_path(voter) %></td>
+        <td><%= link_to 'Destroy', voter, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Voter', new_voter_path %>
