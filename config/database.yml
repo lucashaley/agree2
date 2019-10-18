@@ -24,6 +24,8 @@ default: &default
 development:
   <<: *default
   database: agree2_development
+  host: localhost
+  # port: 5432
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -80,6 +82,7 @@ test:
 #
 production:
   <<: *default
-  database: agree2_production
-  username: agree2
-  password: <%= ENV['AGREE2_DATABASE_PASSWORD'] %>
+  database: <%= ENV['AGREE_HEROKU_DB'] %>
+  username: <%= ENV['AGREE_HEROKU_USER'] %>
+  password: <%= ENV['AGREE_HEROKU_PASSWORD'] %>
+  host: <%= ENV['AGREE_HEROKU_HOST'] %>
