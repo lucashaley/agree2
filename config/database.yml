@@ -80,9 +80,12 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-production:
-  <<: *default
-  database: <%= ENV['AGREE_HEROKU_DB'] %>
-  username: <%= ENV['AGREE_HEROKU_USER'] %>
-  password: <%= ENV['AGREE_HEROKU_PASSWORD'] %>
-  host: <%= ENV['AGREE_HEROKU_HOST'] %>
+
+# This doesn't matter, as Heroku generates the database.yml in the compile phase
+
+# production:
+#   <<: *default
+#   database: <%= ENV['AGREE_HEROKU_DB'] %>
+#   username: <%= ENV['AGREE_HEROKU_USER'] %>
+#   password: <%= ENV['AGREE_HEROKU_PASSWORD'] %>
+#   host: <%= ENV['AGREE_HEROKU_HOST'] %>
