@@ -13,7 +13,7 @@ class StatementsController < ApplicationController
     begin
       current_user.vote_for(@statement)
       respond_to do |format|
-        format.html {redirect_to :back}
+        format.html {redirect_back fallback_location: root_path}
         format.js {}
       end
       # render :nothing => true, :status => 200
