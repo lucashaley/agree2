@@ -10,6 +10,7 @@ This is also my first experiment in deploying to Heroku.
 
 * remember to login to Heroku in the CL by using `heroku login`
 * adding an existing dir to existing project: https://stackoverflow.com/questions/5129598/how-to-link-a-folder-with-an-existing-heroku-app
+* google var buildpack: https://elements.heroku.com/buildpacks/elishaterada/heroku-google-application-credentials-buildpack
 
 ## Some things
 
