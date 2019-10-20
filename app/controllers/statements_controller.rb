@@ -144,24 +144,26 @@ class StatementsController < ApplicationController
       puts "#{token.part_of_speech.tag} #{token.text.content} #{token.part_of_speech.proper}"
     end
 
-    first_image = MiniMagick::Image.open "public/agree_00.png"
-    second_image = MiniMagick::Image.open "https://assets.imgix.net/~text?fm=png&txtsize=40&w=600&txtfont=Helvetica,Bold&txt=" + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
-    result = first_image.composite(second_image) do |c|
-      c.compose "Over" # OverCompositeOp
-      c.geometry "+0+80" # copy second_image onto first_image from (20, 20)
-    end
-    result.write "output_" + @statement.id.to_s + ".png"
-
-    # kit = IMGKit.new('http://google.com', :quality => 50)
-    @kit = IMGKit.new(@statement.content)
-    respond_to do |format|
-      format.html
-      format.png {
-        # send_data(result, :type => "image/png", :disposition => 'inline')
-        send_file "output_" + @statement.id.to_s + ".png", type: 'image/png', disposition: 'inline'
-        # redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
-      }
-    end
+    # # Not sure if this works
+    # # Probably won't work with Heroku
+    # first_image = MiniMagick::Image.open "public/agree_00.png"
+    # second_image = MiniMagick::Image.open "https://assets.imgix.net/~text?fm=png&txtsize=40&w=600&txtfont=Helvetica,Bold&txt=" + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
+    # result = first_image.composite(second_image) do |c|
+    #   c.compose "Over" # OverCompositeOp
+    #   c.geometry "+0+80" # copy second_image onto first_image from (20, 20)
+    # end
+    # result.write "output_" + @statement.id.to_s + ".png"
+    #
+    # # kit = IMGKit.new('http://google.com', :quality => 50)
+    # @kit = IMGKit.new(@statement.content)
+    # respond_to do |format|
+    #   format.html
+    #   format.png {
+    #     # send_data(result, :type => "image/png", :disposition => 'inline')
+    #     send_file "output_" + @statement.id.to_s + ".png", type: 'image/png', disposition: 'inline'
+    #     # redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
+    #   }
+    # end
   end
 
   def create_child
