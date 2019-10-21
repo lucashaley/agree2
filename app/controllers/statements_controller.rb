@@ -190,9 +190,9 @@ class StatementsController < ApplicationController
         Rails.logger.debug "-------------"
         Rails.logger.debug "CREATE_CHILD: NO SAVE"
         Rails.logger.debug "-------------"
-        Rails.logger.debug "-------------"
-        Rails.logger.debug @statement.inspect
-        Rails.logger.debug "-------------"
+        # Rails.logger.debug "-------------"
+        # Rails.logger.debug @statement.inspect
+        # Rails.logger.debug "-------------"
       format.html { render :home }
         format.json { render json: @statement.errors, status: :unprocessable_entity }
       end
@@ -213,9 +213,9 @@ class StatementsController < ApplicationController
   # POST /statements
   # POST /statements.json
   def create
-    Rails.logger.debug "-------------"
-    Rails.logger.debug params.inspect
-    Rails.logger.debug "-------------"
+    # Rails.logger.debug "-------------"
+    # Rails.logger.debug params.inspect
+    # Rails.logger.debug "-------------"
     if (params[:statement_parent_id])
       # we are making a new version
       Rails.logger.debug "CREATE CHILD"
@@ -252,12 +252,12 @@ class StatementsController < ApplicationController
     @new_root = Statement.new(root_params)
     # add user author
     if current_user
-      Rails.logger.debug "\ncurrent_user: " + current_user.inspect
+      # Rails.logger.debug "\ncurrent_user: " + current_user.inspect
       @new_root.author = current_user
     else
       @new_root.author_id = 1
     end
-    Rails.logger.debug "\nnew_root: " + @new_root.inspect
+    # Rails.logger.debug "\nnew_root: " + @new_root.inspect
 
     respond_to do |format|
       # save it to database
@@ -267,7 +267,7 @@ class StatementsController < ApplicationController
         Rails.logger.debug "\n-------- CREATE ROOT SUCCESS --------"
       else
         Rails.logger.debug "\n-------- CREATE ROOT ERROR --------"
-        Rails.logger.debug @new_root.inspect
+        # Rails.logger.debug @new_root.inspect
       end
     end
     Rails.logger.debug "\n-------- CREATE ROOT END --------"
@@ -308,7 +308,7 @@ class StatementsController < ApplicationController
 
     # so this is a hard code version
     @raw = Statement.where('content LIKE ?', "%#{@q.content_cont}%")
-    Rails.logger.debug @raw.inspect
+    # Rails.logger.debug @raw.inspect
   end
 
   protected
