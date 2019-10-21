@@ -9,9 +9,9 @@
       <%= yield(:head) %>
     <% end %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-    <%= stylesheet_link_tag "agree", media: "all" %>
+    <%= stylesheet_link_tag "agree", media: "all", 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <style type="text/css"><%= Diffy::CSS %></style>
     <script>
