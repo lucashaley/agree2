@@ -67,3 +67,6 @@ yarn-debug.log*
 
 # get rid of Mac stuff
 .DS_Store
+
+# don't use the credentials
+We*
