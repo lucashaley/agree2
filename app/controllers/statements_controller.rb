@@ -92,7 +92,15 @@ class StatementsController < ApplicationController
   # GET /statements/1
   # GET /statements/1.json
   def show
-    @agreed = false
+    #! check for format here
+    respond_to do |format|
+      format.html {}
+      format.png {
+        redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
+      }
+    end
+
+    # get the immediate parent for diff
     if @statement.parent
       @diff = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
       # @diff_left = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
@@ -106,13 +114,17 @@ class StatementsController < ApplicationController
     @child.author = current_user
     @child.parent = @statement
 
+    # get the agreement of the current user for this statement
+    @agreed = false
     if current_user
       @agreed = current_user.voted_for?(@statement)
-      Rails.logger.debug "-------------"
-      Rails.logger.debug "VOTED: #{@agreed}"
-      Rails.logger.debug "-------------"
+      # Rails.logger.debug "-------------"
+      # Rails.logger.debug "VOTED: #{@agreed}"
+      # Rails.logger.debug "-------------"
     end
 
+    # set the agree button css.
+    #? is there a better way of doing this in the presentation layer?
     @css_string = "btn btn-success btn-lg"
     if @agreed
       @css_string += " active"
@@ -120,6 +132,7 @@ class StatementsController < ApplicationController
 
     # GOOGLE NATURAL LANGUAGE
     # Imports the Google Cloud client library
+    #? does this need to be here?
     require "google/cloud/language"
     # Instantiates a client
     language = Google::Cloud::Language.new
