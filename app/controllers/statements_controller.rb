@@ -94,67 +94,43 @@ class StatementsController < ApplicationController
   def show
     #! check for format here
     respond_to do |format|
-      format.html {}
+      format.html {
+        # get the immediate parent for diff
+        if @statement.parent
+          @diff = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
+          # @diff_left = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
+          @diff_left = Diffy::SplitDiff.new(@statement.parent.content, @statement.content, :format => :html).left.html_safe
+          @diff_right = Diffy::SplitDiff.new(@statement.parent.content, @statement.content, :format => :html).right.html_safe
+        end
+
+        # create a temporary child in case they want to make a variant
+        @child = Statement.new
+        @child.tag_list = @statement.tag_list
+        @child.author = current_user
+        @child.parent = @statement
+
+        # get the agreement of the current user for this statement
+        @agreed = false
+        if current_user
+          @agreed = current_user.voted_for?(@statement)
+          # Rails.logger.debug "-------------"
+          # Rails.logger.debug "VOTED: #{@agreed}"
+          # Rails.logger.debug "-------------"
+        end
+
+        # set the agree button css.
+        #? is there a better way of doing this in the presentation layer?
+        @css_string = "btn btn-success btn-lg"
+        if @agreed
+          @css_string += " active"
+        end
+
+        # test refactor
+        parse_statement(@statement.content)
+      }
       format.png {
         redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
       }
-    end
-
-    # get the immediate parent for diff
-    if @statement.parent
-      @diff = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
-      # @diff_left = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
-      @diff_left = Diffy::SplitDiff.new(@statement.parent.content, @statement.content, :format => :html).left.html_safe
-      @diff_right = Diffy::SplitDiff.new(@statement.parent.content, @statement.content, :format => :html).right.html_safe
-    end
-
-    # create a temporary child in case they want to make a variant
-    @child = Statement.new
-    @child.tag_list = @statement.tag_list
-    @child.author = current_user
-    @child.parent = @statement
-
-    # get the agreement of the current user for this statement
-    @agreed = false
-    if current_user
-      @agreed = current_user.voted_for?(@statement)
-      # Rails.logger.debug "-------------"
-      # Rails.logger.debug "VOTED: #{@agreed}"
-      # Rails.logger.debug "-------------"
-    end
-
-    # set the agree button css.
-    #? is there a better way of doing this in the presentation layer?
-    @css_string = "btn btn-success btn-lg"
-    if @agreed
-      @css_string += " active"
-    end
-
-    # GOOGLE NATURAL LANGUAGE
-    # Imports the Google Cloud client library
-    #? does this need to be here?
-    require "google/cloud/language"
-    # Instantiates a client
-    language = Google::Cloud::Language.new
-    # The text to analyze
-    text = @statement.content
-    # Detects the sentiment of the text
-    sentiment_req = language.analyze_sentiment content: text, type: :PLAIN_TEXT
-    # Analyzes syntax
-    syntax_req = language.analyze_syntax content: text, type: :PLAIN_TEXT
-    # Get document sentiment from response
-    sentiment = sentiment_req.document_sentiment
-    puts "Text: #{text}"
-    puts "Score: #{sentiment.score}, #{sentiment.magnitude}"
-    # Get syntax details
-    sentences = syntax_req.sentences
-    tokens    = syntax_req.tokens
-
-    puts "Sentences: #{sentences.count}"
-    puts "Tokens: #{tokens.count}"
-
-    tokens.each do |token|
-      puts "#{token.part_of_speech.tag} #{token.text.content} #{token.part_of_speech.proper}"
     end
 
     # # Not sure if this works
@@ -328,6 +304,41 @@ class StatementsController < ApplicationController
 
   def redirect_to_homepage
     redirect_to :root, alert: 'User not found'
+  end
+
+  def parse_statement (text)
+    Rails.logger.debug "\n-------- PARSE_STATEMENT START --------"
+    # GOOGLE NATURAL LANGUAGE
+    # Imports the Google Cloud client library
+    #? does this need to be here?
+    require "google/cloud/language"
+    # Instantiates a client
+    language = Google::Cloud::Language.new
+    # Detects the sentiment of the text
+    sentiment_req = language.analyze_sentiment content: text, type: :PLAIN_TEXT
+    # Analyzes syntax
+    syntax_req = language.analyze_syntax content: text, type: :PLAIN_TEXT
+    # Get document sentiment from response
+    sentiment = sentiment_req.document_sentiment
+    puts "Text: #{text}"
+    puts "Score: #{sentiment.score}, #{sentiment.magnitude}"
+    # Get syntax details
+    sentences = syntax_req.sentences
+    tokens    = syntax_req.tokens
+
+    puts "Sentences: #{sentences.count}"
+    puts "Tokens: #{tokens.count}"
+
+    tokens.each do |token|
+      puts "#{token.part_of_speech.tag} #{token.text.content} #{token.part_of_speech.proper}"
+    end
+
+    puts tokens.first.part_of_speech
+
+    if (tokens.first.part_of_speech.tag.eql? :NOUN) && (tokens.first.part_of_speech.proper.eql? :PROPER)
+      Rails.logger.debug "\n-------- PARSE_STATEMENT STARTS WITH PROPER NOUN --------"
+    end
+    return tokens
   end
 
   private
