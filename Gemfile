@@ -75,6 +75,9 @@ gem 'google-cloud-language'
 gem 'jquery-rails'
 # https://chartkick.com/
 # gem "chartkick"
+# use hashids instead of sequential hashids
+# https://github.com/jcypret/hashid-rails
+gem "hashid-rails", "~> 1.0"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

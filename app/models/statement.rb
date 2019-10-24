@@ -11,4 +11,7 @@ class Statement < ApplicationRecord
   accepts_nested_attributes_for :children
 
   has_many :reports
+
+  # https://github.com/jcypret/hashid-rails
+  include Hashid::Rails
 end

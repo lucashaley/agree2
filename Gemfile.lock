@@ -137,6 +137,10 @@ GEM
     grpc (1.24.0)
       google-protobuf (~> 3.8)
       googleapis-common-protos-types (~> 1.0)
+    hashid-rails (1.2.2)
+      activerecord (>= 4.0)
+      hashids (~> 1.0)
+    hashids (1.0.5)
     i18n (1.7.0)
       concurrent-ruby (~> 1.0)
     imgkit (1.6.2)
@@ -302,6 +306,7 @@ DEPENDENCIES
   diffy (~> 3.3.0)
   fingerprintjs2-rails!
   google-cloud-language
+  hashid-rails (~> 1.0)
   imgkit
   jaro_winkler (~> 1.5.1)
   jbuilder (~> 2.5)
