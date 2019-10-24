@@ -73,6 +73,8 @@ gem 'google-cloud-language'
 # apparently we need this to deploy to heroku
 # https://stackoverflow.com/questions/34171147/rails-couldnt-find-file-jquery-ujs-with-type-application-javascript
 gem 'jquery-rails'
+# https://chartkick.com/
+# gem "chartkick"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

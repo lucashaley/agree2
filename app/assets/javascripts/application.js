@@ -16,3 +16,6 @@
 //= require bootstrap-sprockets
 //= require fingerprint2
 //= require_tree .
+
+// require chartkick
+// require Chart.bundle
