@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :reports
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get "/pages/:page" => "pages#show"
   get 'sessions/new'
@@ -20,6 +21,7 @@ Rails.application.routes.draw do
       post :toggle_agree
       get :image
     end
+    resources :reports
   end
   resources :statements, param: :parent_id do
     resources :statements, as: 'children', shallow: true

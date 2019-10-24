@@ -9,4 +9,6 @@ class Statement < ApplicationRecord
   # belongs_to :parent, class_name: "Statement", optional: true
   # has_many :children, class_name: "Statement", foreign_key: "parent_id"
   accepts_nested_attributes_for :children
+
+  has_many :reports
 end

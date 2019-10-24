@@ -95,6 +95,7 @@ class StatementsController < ApplicationController
     #! check for format here
     respond_to do |format|
       format.html {
+        @reports = @statement.reports
         # get the immediate parent for diff
         if @statement.parent
           @diff = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
@@ -126,7 +127,7 @@ class StatementsController < ApplicationController
         end
 
         # test refactor
-        parse_statement(@statement.content)
+        # parse_statement(@statement.content)
       }
       format.png {
         redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"

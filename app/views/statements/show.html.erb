@@ -51,7 +51,7 @@
           }
         </script>
         <a class="btn btn-info btn-lg" href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-text="I agree that <%= @statement.content %>" data-url="http://localhost:3000/statements/6" data-via="WeAgreeThat" data-hashtags="agree" data-show-count="false"><i class="fa fa-twitter"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        <a class="btn btn-warning btn-lg" role="button">Report</a>
+        <a class="btn btn-warning btn-lg" role="button" data-toggle="modal" data-target="#reportModal">Report</a>
       </div>
     </div>
   </div>
@@ -121,5 +121,74 @@
     </div>
   </div>
 </div>
-
 <% end %>
+
+<div class="row">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Admin</h3>
+          </div>
+          <div class="panel-body">
+            <ul>
+              <li class="list-group-item">Ad Hominem: <%= @reports.adhominem.length %></li>
+              <li class="list-group-item">Nonsense: <%= @reports.nonsense.length %></li>
+              <li class="list-group-item">Inappropriate: <%= @reports.inappropriate.length %></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="reportModalLabel">Report Statement</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-6">
+            Reporting a statement is a thing.
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <form>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="kind" aria-label="...">
+                  Ad Hominem
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="kind" aria-label="...">
+                  Nonsense
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="kind" aria-label="...">
+                  Inappropriate
+                </label>
+              </div>
+            </form>
+          </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% @reports %>
