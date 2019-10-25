@@ -69,5 +69,5 @@ yarn-debug.log*
 .DS_Store
 
 # don't use the credentials
-We*
+WeAgreeThat-*
 erd.pdf
