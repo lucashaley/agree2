@@ -14,4 +14,8 @@ class Statement < ApplicationRecord
 
   # https://github.com/jcypret/hashid-rails
   include Hashid::Rails
+
+  # ActiveStorage
+  # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
+  has_one_attached :statement_image
 end

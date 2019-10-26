@@ -26,6 +26,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/initializers/secret_token.rb
+/config/secrets/*
 
 ## Environment normalization:
 /.bundle
@@ -68,6 +69,4 @@ yarn-debug.log*
 # get rid of Mac stuff
 .DS_Store
 
-# don't use the credentials
-WeAgreeThat-*
 erd.pdf

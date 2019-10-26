@@ -15,3 +15,4 @@ This is also my first experiment in deploying to Heroku.
 ## Some things
 
 * Ruby version 2.4.0 for now
+* Decorators? https://github.com/drapergem/draper

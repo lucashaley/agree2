@@ -132,7 +132,9 @@ class StatementsController < ApplicationController
         # parse_statement(@statement.content)
       }
       format.png {
-        redirect_to create_image(@statement)
+        # this will change once we get cloud storage going on
+        # redirect_to "/assets/images/" + @statement.hashid + ".png"
+        redirect_to @statement.statement_image
 
         # redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
       }
@@ -178,6 +180,9 @@ class StatementsController < ApplicationController
         Rails.logger.debug "-------------"
         @parent.add_child @statement
         current_user.vote_for(@statement)
+        # create the image
+        #? is this the best place for this?
+        create_image(@statement)
         format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
         format.json { render :show, status: :created, location: @statement }
       else
@@ -229,6 +234,9 @@ class StatementsController < ApplicationController
 
     respond_to do |format|
       if @statement.save
+        # create the image
+        #? is this the best place for this?
+        create_image(@statement)
         format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
         format.json { render :show, status: :created, location: @statement }
       else
@@ -363,6 +371,12 @@ class StatementsController < ApplicationController
     Rails.logger.debug convert.command
     convert.call #=> `convert input.jpg -resize 100x100 -negate output.jpg`
 
+    # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
+    # statement.statement_image.attach("public/assets/images/" + statement.hashid + ".png")
+    # https://blog.capsens.eu/how-to-use-activestorage-in-your-rails-5-2-application-cdf3a3ad8d7
+    statement.statement_image.attach(io: File.open('public/assets/images/' + statement.hashid + ".png"), filename: statement.hashid + '.png')
+
+
     # tmp_image = MiniMagick::Tool::Magick.new
     # tmp_drawing = MiniMagick::Tool::Magick::Draw.new
     # tmp_drawing.annotate(tmp_image, 0, 0, 0, 0, statement.content)
@@ -378,6 +392,7 @@ class StatementsController < ApplicationController
 
     Rails.logger.debug ActionController::Base.helpers.image_path("weagreethat.png")
     # ActionController::Base.helpers.image_path("weagreethat.png")
+    # "public/assets/images/" + statement.hashid + ".png"
   end
 
   def parse_statement (text)
