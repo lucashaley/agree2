@@ -6,7 +6,7 @@ class Voter < ApplicationRecord
   # You can track any voteable model.
   has_karma :statements, :as => :submitter, :weight => 0.5
   # Karma by default is only calculated from upvotes. If you pass an array to the weight option, you can count downvotes as well (below, downvotes count for half as much karma against you):
-  has_karma :statements, :as => :submitter, :weight => [ 1, 0.5 ]
+  has_karma :statements, :as => :submitter, :weight => [1, 0.5]
 
   has_many :reports
 end

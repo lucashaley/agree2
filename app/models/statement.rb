@@ -18,4 +18,15 @@ class Statement < ApplicationRecord
   # ActiveStorage
   # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
   has_one_attached :statement_image
+
+  before_create :clean_statement
+
+  def clean_statement
+    Rails.logger.debug "\n-------- CLEAN_STATEMENT --------"
+    # remove initial capital
+    self.content[0] = self.content[0].downcase
+
+    # remove last punctuation
+    content.sub!(/[?.!,;]?$/, '')
+  end
 end
