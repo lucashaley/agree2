@@ -83,19 +83,25 @@
   </div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-md-6 text-left">
-        <h4>Parent version</h4>
+      <div class="col-md-6 col-sm-12 text-left">
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Parent version</h4>
+          </div>
+          <div class="col-sm-12">
+            <%= @diff_left %>
+          </div>
+        </div>
       </div>
-      <div class="col-md-6 text-left">
-        <h4>This version</h4>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6 text-left">
-        <%= @diff_left %>
-      </div>
-      <div class="col-md-6 text-left">
-        <%= @diff_right %>
+      <div class="col-md-6 col-sm-12 text-left">
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>This version</h4>
+          </div>
+          <div class="col-sm-12">
+            <%= @diff_right %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
