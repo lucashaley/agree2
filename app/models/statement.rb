@@ -20,13 +20,20 @@ class Statement < ApplicationRecord
   has_one_attached :statement_image
 
   before_create :clean_statement
+  around_save :save_statement
 
   def clean_statement
-    Rails.logger.debug "\n-------- CLEAN_STATEMENT --------"
+    Rails.logger.debug "\n-------- CLEAN_STATEMENT --------\n"
     # remove initial capital
     self.content[0] = self.content[0].downcase
 
     # remove last punctuation
     content.sub!(/[?.!,;]?$/, '')
+  end
+
+  def save_statement
+    Rails.logger.debug "\n-------- SAVE_STATEMENT Start --------\n"
+    yield
+    Rails.logger.debug "\n-------- SAVE_STATEMENT End --------\n"
   end
 end
