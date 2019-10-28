@@ -169,7 +169,10 @@ class StatementsController < ApplicationController
 
     # make first letter lowercase
     #? This should be sensitive to proper nouns
-    Statement.content = lowercase_first_letter(Statement.content)
+    statement_params[:content] = lowercase_first_letter(statement_params[:content])
+
+    # remove last if punctuation
+    statement_params[:content] = remove_last_character_if_punctuation(statement_params[:content])
 
     # find the parent statement
     @parent = Statement.find(parent_params[:statement_parent_id])
@@ -444,6 +447,12 @@ class StatementsController < ApplicationController
   def lowercase_first_letter (content)
     # this should ultimately check for proper nouns
     content[0] = content[0].downcase
+    return content
+  end
+
+  def remove_last_character_if_punctuation (content)
+    # https://stackoverflow.com/questions/5541317/how-could-i-remove-the-last-character-from-a-string-if-it-is-a-punctuation-in-r
+    content.sub!(/[?.!,;]?$/, '')
     return content
   end
 
