@@ -15,7 +15,7 @@ class StatementsController < ApplicationController
     begin
       current_user.vote_for(@statement)
       respond_to do |format|
-        format.html {redirect_back fallback_location: root_path}
+        format.html { redirect_back fallback_location: root_path }
         format.js {}
       end
       # render :nothing => true, :status => 200
@@ -30,7 +30,7 @@ class StatementsController < ApplicationController
     begin
       current_user.unvote_for(@statement)
       respond_to do |format|
-        format.html {redirect_to :back}
+        format.html { redirect_to :back }
         format.js {}
       end
     rescue ActiveRecord::RecordInvalid
@@ -46,7 +46,7 @@ class StatementsController < ApplicationController
         current_user.vote_for(@statement)
       end
       respond_to do |format|
-        format.html {redirect_to :back}
+        format.html { redirect_to :back }
         format.js {}
       end
       # render :nothing => true, :status => 200
@@ -65,10 +65,10 @@ class StatementsController < ApplicationController
     # get the first one
     @statement = Statement.find(1)
     @top_ten = Statement.tally({
-      :at_least => 1,
-      :limit => 10,
-      :order => 'vote_count desc'
-    })
+                                 :at_least => 1,
+                                 :limit => 10,
+                                 :order => 'vote_count desc'
+                               })
     if current_user
       @agreed = current_user.voted_for?(@statement)
       Rails.logger.debug "-------------"
@@ -84,17 +84,17 @@ class StatementsController < ApplicationController
     # @top_ten = Statement.tally.order(:votes_for)
     @tags = Statement.tag_counts_on(:tags)
     @top_ten = Statement.tally({
-      :at_least => 1,
-      :limit => 10,
-      :order => 'vote_count desc'
-    })
+                                 :at_least => 1,
+                                 :limit => 10,
+                                 :order => 'vote_count desc'
+                               })
     @most_recent = Statement.order('created_at desc').limit(10)
   end
 
   # GET /statements/1
   # GET /statements/1.json
   def show
-    #! check for format here
+    # ! check for format here
     respond_to do |format|
       format.html {
         @reports = @statement.reports
@@ -122,7 +122,7 @@ class StatementsController < ApplicationController
         end
 
         # set the agree button css.
-        #? is there a better way of doing this in the presentation layer?
+        # ? is there a better way of doing this in the presentation layer?
         @css_string = "btn btn-success btn-lg"
         if @agreed
           @css_string += " active"
@@ -168,7 +168,7 @@ class StatementsController < ApplicationController
     Rails.logger.debug "-------------"
 
     # make first letter lowercase
-    #? This should be sensitive to proper nouns
+    # ? This should be sensitive to proper nouns
     statement_params[:content] = lowercase_first_letter(statement_params[:content])
 
     # remove last if punctuation
@@ -195,7 +195,7 @@ class StatementsController < ApplicationController
         @parent.add_child @statement
         current_user.vote_for(@statement)
         # create the image
-        #? is this the best place for this?
+        # ? is this the best place for this?
         create_image(@statement)
         format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
         format.json { render :show, status: :created, location: @statement }
@@ -206,7 +206,7 @@ class StatementsController < ApplicationController
         # Rails.logger.debug "-------------"
         # Rails.logger.debug @statement.inspect
         # Rails.logger.debug "-------------"
-      format.html { render :home }
+        format.html { render :home }
         format.json { render json: @statement.errors, status: :unprocessable_entity }
       end
     end
@@ -249,7 +249,7 @@ class StatementsController < ApplicationController
     respond_to do |format|
       if @statement.save
         # create the image
-        #? is this the best place for this?
+        # ? is this the best place for this?
         create_image(@statement)
         format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
         format.json { render :show, status: :created, location: @statement }
@@ -333,7 +333,7 @@ class StatementsController < ApplicationController
     redirect_to :root, alert: 'User not found'
   end
 
-  def create_image (statement)
+  def create_image(statement)
     Rails.logger.debug "\n-------- create_image START --------"
     # MiniMagick::Tool::Convert.new do | new_image |
     #   new_image.size "1024x1024"
@@ -390,7 +390,6 @@ class StatementsController < ApplicationController
     # https://blog.capsens.eu/how-to-use-activestorage-in-your-rails-5-2-application-cdf3a3ad8d7
     statement.statement_image.attach(io: File.open('public/assets/images/' + statement.hashid + ".png"), filename: statement.hashid + '.png')
 
-
     # tmp_image = MiniMagick::Tool::Magick.new
     # tmp_drawing = MiniMagick::Tool::Magick::Draw.new
     # tmp_drawing.annotate(tmp_image, 0, 0, 0, 0, statement.content)
@@ -403,17 +402,16 @@ class StatementsController < ApplicationController
     # convert << "public/assets/images/" + statement.hashid + ".png"
     # convert.call
 
-
     Rails.logger.debug ActionController::Base.helpers.image_path("weagreethat.png")
     # ActionController::Base.helpers.image_path("weagreethat.png")
     # "public/assets/images/" + statement.hashid + ".png"
   end
 
-  def parse_statement (text)
+  def parse_statement(text)
     Rails.logger.debug "\n-------- PARSE_STATEMENT START --------"
     # GOOGLE NATURAL LANGUAGE
     # Imports the Google Cloud client library
-    #? does this need to be here?
+    # ? does this need to be here?
     require "google/cloud/language"
     # Instantiates a client
     language = Google::Cloud::Language.new
@@ -444,50 +442,51 @@ class StatementsController < ApplicationController
     return tokens
   end
 
-  def lowercase_first_letter (content)
+  def lowercase_first_letter(content)
     # this should ultimately check for proper nouns
     content[0] = content[0].downcase
     return content
   end
 
-  def remove_last_character_if_punctuation (content)
+  def remove_last_character_if_punctuation(content)
     # https://stackoverflow.com/questions/5541317/how-could-i-remove-the-last-character-from-a-string-if-it-is-a-punctuation-in-r
     content.sub!(/[?.!,;]?$/, '')
     return content
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_statement
-      @statement = Statement.find(params[:id])
-    end
 
-    def set_parent
-      if (params[:statement_parent_id])
-        @parent = Statement.find(params[:statement_parent_id])
-      elsif (params[:statement_id])
-        @parent = Statement.find(params[:statement_id]).parent
-      # we need to include an else for a brand new one from index
-      else
-        # for show.html.erb
-        @parent = @statement.parent
-      end
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_statement
+    @statement = Statement.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def statement_params
-      params.require(:statement).permit(:content, :author_id, :parent_id, :tag_list)
+  def set_parent
+    if (params[:statement_parent_id])
+      @parent = Statement.find(params[:statement_parent_id])
+    elsif (params[:statement_id])
+      @parent = Statement.find(params[:statement_id]).parent
+    # we need to include an else for a brand new one from index
+    else
+      # for show.html.erb
+      @parent = @statement.parent
     end
+  end
 
-    def parent_params
-      params.require(:statement).permit(:statement_parent_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def statement_params
+    params.require(:statement).permit(:content, :author_id, :parent_id, :tag_list)
+  end
 
-    def root_params
-      params.require(:statement).permit(:content, :tag_list)
-    end
+  def parent_params
+    params.require(:statement).permit(:statement_parent_id)
+  end
 
-    def search_params
-      params.permit(:utf8, :commit, q: [:content_cont]).to_h
-    end
+  def root_params
+    params.require(:statement).permit(:content, :tag_list)
+  end
+
+  def search_params
+    params.permit(:utf8, :commit, q: [:content_cont]).to_h
+  end
 end

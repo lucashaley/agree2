@@ -62,13 +62,14 @@ class VotersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_voter
-      @voter = Voter.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def voter_params
-      params.require(:voter).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_voter
+    @voter = Voter.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def voter_params
+    params.require(:voter).permit(:name)
+  end
 end

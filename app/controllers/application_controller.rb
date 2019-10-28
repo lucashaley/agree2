@@ -20,6 +20,6 @@ class ApplicationController < ActionController::Base
   end
 
   def search_params
-      params.permit(:utf8, :commit, q: [:content_cont]).to_h
+    params.permit(:utf8, :commit, q: [:content_cont]).to_h
   end
 end
