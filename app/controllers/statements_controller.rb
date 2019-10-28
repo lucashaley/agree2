@@ -327,40 +327,11 @@ class StatementsController < ApplicationController
   end
 
   def create_image(statement)
-    Rails.logger.debug "\n-------- create_image START --------"
-    # MiniMagick::Tool::Convert.new do | new_image |
-    #   new_image.size "1024x1024"
-    #   new_image << "wecanagree.png"
-    # end
-
-    # image = MiniMagick::Image.open('app/assets/images/weagreethat.png')
-    # image.size "1024x"
-    # image.fill "black"
-    # image.weight "700"
-    # image << "-weight 700"
-    # # image.pointsize "48"
-    # image.draw "text 100,100 '" + statement.content + "'"
-    # image.gravity "NorthWest"
-    # image.caption "BALLSack"
-    # # image.negate
-    # image.write "public/assets/images/" + statement.hashid + ".png"
-
-    # MiniMagick::Tool::Magick.new do |magick|
-    #   magick << "app/assets/images/weagreethat.png"
-    #   magick.size "1024x"
-    #   magick.draw ("text 100,100 balls")
-    #   magick.negate
-    #   magick << "public/assets/images/" + statement.hashid + ".png"
-    # end
+    Rails.logger.debug "\n-------- create_image START --------\n"
 
     image_statement = "I agree that " + statement.content.gsub("'", %q(\\\'))
     convert = MiniMagick::Tool::Convert.new
     convert << "app/assets/images/weagreethat.png"
-    # convert.weight ("900")
-    # convert.pointsize "20"
-    # convert.size '1024x'
-    # # this is fancy for escaping apostropes
-    # convert.draw ("text 100,100 \'" + statement.content.gsub("'", %q(\\\')) + "\'")
     convert << "-size"
     convert << "992x960"
     convert << "-extent"
@@ -370,9 +341,7 @@ class StatementsController < ApplicationController
     convert << "-weight"
     convert << "900"
     convert.gravity ("NorthWest")
-    # convert << "caption:butthole"
     convert << "caption:" + image_statement
-    # convert.annotate 0x0 "'" + statement.content + "'"
     convert << "-composite"
     convert << "public/assets/images/" + statement.hashid + ".png"
     Rails.logger.debug convert.command
@@ -382,22 +351,7 @@ class StatementsController < ApplicationController
     # statement.statement_image.attach("public/assets/images/" + statement.hashid + ".png")
     # https://blog.capsens.eu/how-to-use-activestorage-in-your-rails-5-2-application-cdf3a3ad8d7
     statement.statement_image.attach(io: File.open('public/assets/images/' + statement.hashid + ".png"), filename: statement.hashid + '.png')
-
-    # tmp_image = MiniMagick::Tool::Magick.new
-    # tmp_drawing = MiniMagick::Tool::Magick::Draw.new
-    # tmp_drawing.annotate(tmp_image, 0, 0, 0, 0, statement.content)
-
-    # convert = MiniMagick::Tool::Convert.new
-    # convert << "app/assets/images/weagreethat.png"
-    # # convert.font "helvetica"
-    # convert.pointsize 36
-    # convert.draw "text 100,100 '" + statement.content + "'"
-    # convert << "public/assets/images/" + statement.hashid + ".png"
-    # convert.call
-
-    Rails.logger.debug ActionController::Base.helpers.image_path("weagreethat.png")
-    # ActionController::Base.helpers.image_path("weagreethat.png")
-    # "public/assets/images/" + statement.hashid + ".png"
+    Rails.logger.debug "\n-------- create_image END --------\n"
   end
 
   def parse_statement(text)
