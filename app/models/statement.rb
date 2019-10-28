@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Statement < ApplicationRecord
   has_closure_tree
   acts_as_taggable

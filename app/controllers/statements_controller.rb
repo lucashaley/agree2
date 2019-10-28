@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StatementsController < ApplicationController
   require "mini_magick"
 
@@ -6,12 +8,12 @@ class StatementsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_homepage
 
   def agree
-    Rails.logger.debug "-------------"
-    Rails.logger.debug "AGREE"
-    Rails.logger.debug "-------------"
-    Rails.logger.debug "-------------"
+    Rails.logger.debug '-------------'
+    Rails.logger.debug 'AGREE'
+    Rails.logger.debug '-------------'
+    Rails.logger.debug '-------------'
     Rails.logger.debug current_user
-    Rails.logger.debug "-------------"
+    Rails.logger.debug '-------------'
     begin
       current_user.vote_for(@statement)
       respond_to do |format|
@@ -71,9 +73,9 @@ class StatementsController < ApplicationController
                                })
     if current_user
       @agreed = current_user.voted_for?(@statement)
-      Rails.logger.debug "-------------"
+      Rails.logger.debug '-------------'
       Rails.logger.debug "VOTED: #{@agreed}"
-      Rails.logger.debug "-------------"
+      Rails.logger.debug '-------------'
     end
   end
 
@@ -116,16 +118,16 @@ class StatementsController < ApplicationController
         @agreed = false
         if current_user
           @agreed = current_user.voted_for?(@statement)
-          # Rails.logger.debug "-------------"
+          # Rails.logger.debug '-------------'
           # Rails.logger.debug "VOTED: #{@agreed}"
-          # Rails.logger.debug "-------------"
+          # Rails.logger.debug '-------------'
         end
 
         # set the agree button css.
         # ? is there a better way of doing this in the presentation layer?
-        @css_string = "btn btn-success btn-lg"
+        @css_string = 'btn btn-success btn-lg'
         if @agreed
-          @css_string += " active"
+          @css_string += ' active'
         end
 
         # test refactor
@@ -163,9 +165,9 @@ class StatementsController < ApplicationController
   end
 
   def create_child
-    Rails.logger.debug "-------------"
-    Rails.logger.debug "CREATE_CHILD"
-    Rails.logger.debug "-------------"
+    Rails.logger.debug '-------------'
+    Rails.logger.debug 'CREATE_CHILD'
+    Rails.logger.debug '-------------'
 
     # find the parent statement
     @parent = Statement.find(parent_params[:statement_parent_id])
@@ -176,15 +178,15 @@ class StatementsController < ApplicationController
     # create the new statement
     @statement = Statement.new(merged_params)
 
-    Rails.logger.debug "-------------"
-    Rails.logger.debug "CHILD: " + @statement.inspect
-    Rails.logger.debug "-------------"
+    Rails.logger.debug '-------------'
+    Rails.logger.debug 'CHILD: ' + @statement.inspect
+    Rails.logger.debug '-------------'
 
     respond_to do |format|
       if @statement.save
-        Rails.logger.debug "-------------"
-        Rails.logger.debug "CREATE_CHILD: SAVE"
-        Rails.logger.debug "-------------"
+        Rails.logger.debug '-------------'
+        Rails.logger.debug 'CREATE_CHILD: SAVE'
+        Rails.logger.debug '-------------'
         @parent.add_child @statement
         current_user.vote_for(@statement)
         # create the image
@@ -193,12 +195,12 @@ class StatementsController < ApplicationController
         format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
         format.json { render :show, status: :created, location: @statement }
       else
-        Rails.logger.debug "-------------"
-        Rails.logger.debug "CREATE_CHILD: NO SAVE"
-        Rails.logger.debug "-------------"
-        # Rails.logger.debug "-------------"
+        Rails.logger.debug '-------------'
+        Rails.logger.debug 'CREATE_CHILD: NO SAVE'
+        Rails.logger.debug '-------------'
+        # Rails.logger.debug '-------------'
         # Rails.logger.debug @statement.inspect
-        # Rails.logger.debug "-------------"
+        # Rails.logger.debug '-------------'
         format.html { render :home }
         format.json { render json: @statement.errors, status: :unprocessable_entity }
       end
@@ -219,12 +221,12 @@ class StatementsController < ApplicationController
   # POST /statements
   # POST /statements.json
   def create
-    # Rails.logger.debug "-------------"
+    # Rails.logger.debug '-------------'
     # Rails.logger.debug params.inspect
-    # Rails.logger.debug "-------------"
+    # Rails.logger.debug '-------------'
     if (params[:statement_parent_id])
       # we are making a new version
-      Rails.logger.debug "CREATE CHILD"
+      Rails.logger.debug 'CREATE CHILD'
       @parent = Statement.find(params[:statement_parent_id])
       Rails.logger.debug "PARENT: " + @parent.inspect
       @statement = @parent.children.create(statement_params)

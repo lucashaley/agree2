@@ -1,1 +1,1 @@
-json.partial! "statements/statement", statement: @statement
+json.partial! 'statements/statement', statement: @statement
