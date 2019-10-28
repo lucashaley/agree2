@@ -6,8 +6,6 @@ class Statement < ApplicationRecord
   validates :content, presence: true
 
   belongs_to :author, class_name: 'Voter'
-  # belongs_to :parent, class_name: "Statement", optional: true
-  # has_many :children, class_name: "Statement", foreign_key: "parent_id"
   accepts_nested_attributes_for :children
 
   has_many :reports
@@ -23,17 +21,22 @@ class Statement < ApplicationRecord
   around_save :save_statement
 
   def clean_statement
-    Rails.logger.debug "\n-------- CLEAN_STATEMENT --------\n"
+    Rails.logger.debug "\n-------- CLEAN_STATEMENT Start --------\n"
+
     # remove initial capital
     self.content[0] = self.content[0].downcase
 
     # remove last punctuation
     content.sub!(/[?.!,;]?$/, '')
+
+    Rails.logger.debug "\n-------- CLEAN_STATEMENT End --------\n"
   end
 
   def save_statement
     Rails.logger.debug "\n-------- SAVE_STATEMENT Start --------\n"
+
     yield
+    
     Rails.logger.debug "\n-------- SAVE_STATEMENT End --------\n"
   end
 end

@@ -82,6 +82,9 @@ gem "hashid-rails", "~> 1.0"
 gem "google-cloud-storage", "~> 1.8", require: false
 # https://github.com/rubocop-hq/rubocop
 gem 'rubocop', require: false
+# https://github.com/madrobby/zaru
+# used for sanitising filepaths
+gem 'zaru'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -97,6 +100,8 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   # https://voormedia.github.io/rails-erd
   gem "rails-erd"
+  # https://github.com/presidentbeef/brakeman
+  gem 'brakeman'
 end
 
 group :test do
