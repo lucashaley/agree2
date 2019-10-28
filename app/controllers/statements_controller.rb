@@ -166,9 +166,20 @@ class StatementsController < ApplicationController
     Rails.logger.debug "-------------"
     Rails.logger.debug "CREATE_CHILD"
     Rails.logger.debug "-------------"
+
+    # make first letter lowercase
+    #? This should be sensitive to proper nouns
+    Statement.content = lowercase_first_letter(Statement.content)
+
+    # find the parent statement
     @parent = Statement.find(parent_params[:statement_parent_id])
+
+    # add the current user to the new statement
     merged_params = statement_params.merge!(:author => current_user)
+
+    # create the new statement
     @statement = Statement.new(merged_params)
+
     Rails.logger.debug "-------------"
     Rails.logger.debug "CHILD: " + @statement.inspect
     Rails.logger.debug "-------------"
@@ -428,6 +439,12 @@ class StatementsController < ApplicationController
       Rails.logger.debug "\n-------- PARSE_STATEMENT STARTS WITH PROPER NOUN --------"
     end
     return tokens
+  end
+
+  def lowercase_first_letter (content)
+    # this should ultimately check for proper nouns
+    content[0] = content[0].downcase
+    return content
   end
 
   private
