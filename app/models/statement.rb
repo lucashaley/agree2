@@ -3,20 +3,23 @@ class Statement < ApplicationRecord
   acts_as_taggable
   acts_as_voteable
 
-  validates :content, presence: true
-
-  belongs_to :author, class_name: 'Voter'
-  accepts_nested_attributes_for :children
-
-  has_many :reports
-
+  # Includes
   # https://github.com/jcypret/hashid-rails
   include Hashid::Rails
+
+  # Validations
+  validates :content, presence: true
+
+  # Relationships
+  belongs_to :author, class_name: 'Voter'
+  accepts_nested_attributes_for :children
+  has_many :reports
 
   # ActiveStorage
   # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
   has_one_attached :statement_image
 
+  # Callbacks
   before_create :clean_statement
   around_save :save_statement
 
@@ -36,7 +39,7 @@ class Statement < ApplicationRecord
     Rails.logger.debug "\n-------- SAVE_STATEMENT Start --------\n"
 
     yield
-    
+
     Rails.logger.debug "\n-------- SAVE_STATEMENT End --------\n"
   end
 end
