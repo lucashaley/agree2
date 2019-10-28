@@ -29,7 +29,7 @@ class Statement < ApplicationRecord
     Rails.logger.debug "\n-------- CLEAN_STATEMENT Start --------\n"
 
     # remove initial capital
-    self.content[0] = self.content[0].downcase
+    content[0] = content[0].downcase
 
     # remove last punctuation
     content.sub!(/[?.!,;]?$/, '')
