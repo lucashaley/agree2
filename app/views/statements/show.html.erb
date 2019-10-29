@@ -67,10 +67,11 @@
         <%= f.label :tag_list %>
         <%= f.text_field :tag_list, value: f.object.tag_list.to_s, size: 80 %>
       </div>
-      <%= f.hidden_field :statement_parent_id, :value => @statement.id %>
+      <%= f.hidden_field :parent_id, :value => @statement.id %>
       <a class="btn btn-warning btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Cancel</a>
       <%= f.submit "Submit variant and agree", class: "btn btn-success btn-lg" %>
       <% end %>
+      <p>If you'd like to create an entirely new statement, click here.</p>
     </div>
   </div>
 </div>

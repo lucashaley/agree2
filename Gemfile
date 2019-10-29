@@ -81,7 +81,7 @@ gem "hashid-rails", "~> 1.0"
 # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
 gem "google-cloud-storage", "~> 1.8", require: false
 # https://github.com/rubocop-hq/rubocop
-gem 'rubocop', require: false
+gem 'rubocop', '~> 0.76.0', require: false
 # https://github.com/madrobby/zaru
 # used for sanitising filepaths
 gem 'zaru'

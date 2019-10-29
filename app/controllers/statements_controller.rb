@@ -4,7 +4,8 @@ class StatementsController < ApplicationController
   require "mini_magick"
 
   before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree]
-  before_action :set_parent, only: [:show, :update]
+  before_action :set_parent, only: [:show, :update, :create]
+  before_action :set_parent_for_new, only: [:create_child]
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_homepage
 
   def agree
@@ -101,11 +102,12 @@ class StatementsController < ApplicationController
       format.html {
         @reports = @statement.reports
         # get the immediate parent for diff
-        if @statement.parent
-          @diff = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
-          # @diff_left = Diffy::Diff.new(@statement.parent.content, @statement.content).to_s(:html).html_safe
-          @diff_left = Diffy::SplitDiff.new(@statement.parent.content, @statement.content, :format => :html).left.html_safe
-          @diff_right = Diffy::SplitDiff.new(@statement.parent.content, @statement.content, :format => :html).right.html_safe
+        # this might be an extra call
+        # if @statement.parent
+        if @parent
+          @diff = Diffy::Diff.new(@parent.content, @statement.content).to_s(:html).html_safe
+          @diff_left = Diffy::SplitDiff.new(@parent.content, @statement.content, :format => :html).left.html_safe
+          @diff_right = Diffy::SplitDiff.new(@parent.content, @statement.content, :format => :html).right.html_safe
         end
 
         # create a temporary child in case they want to make a variant
@@ -170,7 +172,7 @@ class StatementsController < ApplicationController
     Rails.logger.debug '-------------'
 
     # find the parent statement
-    @parent = Statement.find(parent_params[:statement_parent_id])
+    @parent = Statement.find(parent_params[:parent_id])
 
     # add the current user to the new statement
     merged_params = statement_params.merge!(:author => current_user)
@@ -179,7 +181,7 @@ class StatementsController < ApplicationController
     @statement = Statement.new(merged_params)
 
     Rails.logger.debug '-------------'
-    Rails.logger.debug 'CHILD: ' + @statement.inspect
+    Rails.logger.debug "CHILD: #{@statement.inspect}" # + @statement.inspect
     Rails.logger.debug '-------------'
 
     respond_to do |format|
@@ -227,7 +229,10 @@ class StatementsController < ApplicationController
     if (params[:statement_parent_id])
       # we are making a new version
       Rails.logger.debug 'CREATE CHILD'
-      @parent = Statement.find(params[:statement_parent_id])
+
+      # in callbacks now
+      # @parent = Statement.find(params[:statement_parent_id])
+
       Rails.logger.debug "PARENT: " + @parent.inspect
       @statement = @parent.children.create(statement_params)
       Rails.logger.debug @statement.inspect
@@ -352,7 +357,7 @@ class StatementsController < ApplicationController
     # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
     # statement.statement_image.attach("public/assets/images/" + statement.hashid + ".png")
     # https://blog.capsens.eu/how-to-use-activestorage-in-your-rails-5-2-application-cdf3a3ad8d7
-    statement.statement_image.attach(io: File.open('public/assets/images/' + statement.hashid + ".png"), filename: statement.hashid + '.png')
+    statement.statement_image.attach(io: File.open("public/assets/images/#{statement.hashid}.png"), filename: "#{statement.hashid}.png")
     Rails.logger.debug "\n-------- create_image END --------\n"
   end
 
@@ -361,7 +366,7 @@ class StatementsController < ApplicationController
     # GOOGLE NATURAL LANGUAGE
     # Imports the Google Cloud client library
     # ? does this need to be here?
-    require "google/cloud/language"
+    require 'google/cloud/language'
     # Instantiates a client
     language = Google::Cloud::Language.new
     # Detects the sentiment of the text
@@ -388,35 +393,58 @@ class StatementsController < ApplicationController
     if (tokens.first.part_of_speech.tag.eql? :NOUN) && (tokens.first.part_of_speech.proper.eql? :PROPER)
       Rails.logger.debug "\n-------- PARSE_STATEMENT STARTS WITH PROPER NOUN --------"
     end
-    return tokens
+    tokens
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_statement
+    Rails.logger.debug "\n\n-------- SET_STATEMENT start --------\n\n"
     @statement = Statement.find(params[:id])
+    Rails.logger.debug "\n\n-------- SET_STATEMENT end --------\n\n"
+  end
+
+  def set_parent_for_new
+    Rails.logger.debug "\n\n-------- SET_PARENT_FOR_NEW start --------\n\n"
+    if params[:statement][:parent_id]
+      @parent = Statement.find(params[:statement][:parent_id])
+    end
+    Rails.logger.debug "\n\n-------- SET_PARENT_FOR_NEW end --------\n\n"
   end
 
   def set_parent
-    if (params[:statement_parent_id])
-      @parent = Statement.find(params[:statement_parent_id])
-    elsif (params[:statement_id])
-      @parent = Statement.find(params[:statement_id]).parent
+    Rails.logger.debug "\n\n-------- SET_PARENT start --------\n\n"
+
+    if params[:parent_id]
+      Rails.logger.debug "\n\n-------- SET_PARENT parent_id --------\n\n"
+      @parent = Statement.find(params[:parent_id])
+    elsif params[:id]
+      Rails.logger.debug "\n\n-------- SET_PARENT id --------\n\n"
+
+      # this is an extra db call
+      # @parent = Statement.find(params[:id]).parent
+      @parent = @statement.parent
     # we need to include an else for a brand new one from index
     else
       # for show.html.erb
+      Rails.logger.debug "\n\n-------- SET_PARENT none --------\n\n"
       @parent = @statement.parent
     end
+    Rails.logger.debug "\n\n-------- SET_PARENT end --------\n\n"
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
+  def statement_params_new
+    params.permit(:id)
+  end
+
   def statement_params
     params.require(:statement).permit(:content, :author_id, :parent_id, :tag_list)
   end
 
   def parent_params
-    params.require(:statement).permit(:statement_parent_id)
+    params.require(:statement).permit(:parent_id, :id)
   end
 
   def root_params
