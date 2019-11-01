@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
   def create
     Rails.logger.debug '-------------'
-    Rails.logger.debug "sessions.create"
+    Rails.logger.debug 'sessions.create'
     Rails.logger.debug '-------------'
 
     voter = Voter.find_or_create_by!(fingerprint: params[:fingerprint])
@@ -29,6 +29,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:voter_id] = nil
-    redirect_to root_url, notice: "Logged out!"
+    redirect_to root_url, notice: 'Logged out!'
   end
 end
