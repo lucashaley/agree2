@@ -23,9 +23,9 @@ class StatementsController < ApplicationController
       end
       # render :nothing => true, :status => 200
     rescue ActiveRecord::RecordInvalid
-      render :nothing => true, :status => 404
+      render nothing: true, status: 404
     rescue ActiveRecord::RecordNotFound
-      render :nothing => true, :status => 404
+      render nothing: true, status: 404
     end
   end
 
@@ -37,7 +37,7 @@ class StatementsController < ApplicationController
         format.js {}
       end
     rescue ActiveRecord::RecordInvalid
-      render :nothing => true, :status => 404
+      render nothing: true, status: 404
     end
   end
 
@@ -54,9 +54,9 @@ class StatementsController < ApplicationController
       end
       # render :nothing => true, :status => 200
     rescue ActiveRecord::RecordInvalid
-      render :nothing => true, :status => 404
+      render nothing: true, status: 404
     rescue ActiveRecord::RecordNotFound
-      render :nothing => true, :status => 404
+      render nothing: true, status: 404
     end
   end
 
@@ -68,9 +68,9 @@ class StatementsController < ApplicationController
     # get the first one
     @statement = Statement.find(1)
     @top_ten = Statement.tally({
-                                 :at_least => 1,
-                                 :limit => 10,
-                                 :order => 'vote_count desc'
+                                 at_least: 1,
+                                 limit: 10,
+                                 order: 'vote_count desc'
                                })
     if current_user
       @agreed = current_user.voted_for?(@statement)
@@ -149,7 +149,7 @@ class StatementsController < ApplicationController
     @parent = Statement.find(parent_params[:parent_id])
 
     # add the current user to the new statement
-    merged_params = statement_params.merge!(:author => current_user)
+    merged_params = statement_params.merge!(author: current_user)
 
     # create the new statement
     @statement = Statement.new(merged_params)
