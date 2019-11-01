@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       post :toggle_agree
       get :image
     end
-    resources :reports
+    resources :reports, only: [:create]
   end
   resources :statements, param: :parent_id do
     resources :statements, as: 'children', shallow: true

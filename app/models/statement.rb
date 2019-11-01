@@ -15,7 +15,8 @@ class Statement < ApplicationRecord
   # Relationships
   belongs_to :author, class_name: 'Voter'
   accepts_nested_attributes_for :children
-  has_many :reports
+  has_many :reports, dependent: :destroy
+  accepts_nested_attributes_for :reports
 
   # ActiveStorage
   # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html

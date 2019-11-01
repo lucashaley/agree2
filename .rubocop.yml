@@ -1,0 +1,13 @@
+
+# AllCops:
+#   Exclude:
+#    — db/schema.rb
+#    — db/migrate/**/*
+#    — lib/tasks/**/*
+
+Style/Documentation:
+  Enabled: false
+Metrics/LineLength:
+  Max: 120
+  Exclude:
+    - spec/**/*

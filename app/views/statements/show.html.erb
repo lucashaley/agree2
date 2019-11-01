@@ -1,4 +1,5 @@
 <% content_for :head do %>
+<title>We Agree That… <%= @statement.content.truncate(40, separator: ' ') %></title>
 <meta property="og:url"                content='<%= request.original_url %>' />
 <meta property="og:type"               content="article" />
 <meta property="og:title"              content="We Can Agree" />
@@ -157,42 +158,50 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="reportModalLabel">Report Statement</h4>
+        <h3 class="modal-title" id="reportModalLabel">Report Statement</h3>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-6">
-            Reporting a statement is a thing.
+            <p>
+              We agree that this website should be an open forum for honest, axiomatic debate. However, we do not tolerate some kinds of speech, not only because it's cruel, but also because it's unaxiomatic.
+            </p>
+            <p>
+              Submitting this report will not automatically remove the offending statement. We hope to be able to personally review statements that generate a lot of reports.
+            </p>
+            <p>
+              Please use this reporting tool carefully.
+            </p>
           </div>
         </div>
         <div class="row">
           <div class="col-lg-6">
-            <form>
+            <h4>Type of Report</h4>
+            <%= form_with(model: [@statement, Report.new]) do |f| %>
               <div class="radio">
                 <label>
-                  <input type="radio" name="kind" aria-label="...">
+                  <input type="radio" id="report_kind_adhominem" name="report[kind]" value="adhominem" aria-label="...">
                   Ad Hominem
                 </label>
               </div>
               <div class="radio">
                 <label>
-                  <input type="radio" name="kind" aria-label="...">
+                  <input type="radio" id="report_kind_nonsense" name="report[kind]" value="nonsense" aria-label="...">
                   Nonsense
                 </label>
               </div>
               <div class="radio">
                 <label>
-                  <input type="radio" name="kind" aria-label="...">
+                  <input type="radio" id="report_kind_inappropriate" name="report[kind]" value="inappropriate" aria-label="...">
                   Inappropriate
                 </label>
               </div>
-            </form>
           </div><!-- /.col-lg-6 -->
         </div><!-- /.row -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send report</button>
+              <%= f.submit "Submit report", class: "btn btn-warning btn-lg" %>
+            <% end %>
       </div>
     </div>
   </div>
