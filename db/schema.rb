@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_26_045729) do
+ActiveRecord::Schema.define(version: 2019_11_03_080038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 2019_10_26_045729) do
     t.integer "voter_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "country"
     t.index ["voteable_id", "voteable_type"], name: "index_votes_on_voteable_id_and_voteable_type"
     t.index ["voter_id", "voter_type", "voteable_id", "voteable_type"], name: "fk_one_vote_per_user_per_entity", unique: true
     t.index ["voter_id", "voter_type"], name: "index_votes_on_voter_id_and_voter_type"

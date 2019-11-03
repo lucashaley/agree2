@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReportsController < ApplicationController
-
   before_action :set_statement, only: [:create]
 
   def new

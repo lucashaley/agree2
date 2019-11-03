@@ -85,6 +85,8 @@ gem 'rubocop', '~> 0.76.0', require: false
 # https://github.com/madrobby/zaru
 # used for sanitising filepaths
 gem 'zaru'
+# https://github.com/jnunemaker/httparty
+gem 'httparty'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

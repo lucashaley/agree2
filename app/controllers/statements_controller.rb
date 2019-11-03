@@ -16,7 +16,9 @@ class StatementsController < ApplicationController
     Rails.logger.debug current_user
     Rails.logger.debug '-------------'
     begin
-      current_user.vote_for(@statement)
+      vote = current_user.vote_for(@statement)
+      Rails.logger.debug vote.inspect
+
       respond_to do |format|
         format.html { redirect_back fallback_location: root_path }
         format.js {}
@@ -42,11 +44,25 @@ class StatementsController < ApplicationController
   end
 
   def toggle_agree
+    Rails.logger.debug '-------------'
+    Rails.logger.debug 'TOGGLE_AGREE start'
+    Rails.logger.debug '-------------'
+
     begin
       if current_user.voted_for?(@statement)
         current_user.unvote_for(@statement)
       else
-        current_user.vote_for(@statement)
+        vote = current_user.vote_for(@statement)
+
+        # this section adds the country to the vote
+        # clearly not the best way or place to do this.
+        if Rails.env.production?
+          ip = request.remote_ip
+        else
+          ip = Net::HTTP.get(URI.parse('http://checkip.amazonaws.com/')).squish
+        end
+        country_code = HTTParty.get("http://ip-api.com/line/#{ip}?fields=countryCode").body.strip
+        vote.update_column(:country, country_code)
       end
       respond_to do |format|
         format.html { redirect_to :back }
