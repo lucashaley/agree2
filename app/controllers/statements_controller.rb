@@ -310,19 +310,24 @@ class StatementsController < ApplicationController
   def create_image(statement)
     Rails.logger.debug "\n-------- create_image START --------\n"
 
-    image_statement = "I agree that " + statement.content.gsub("'", %q(\\\'))
+    text_statement = "I agree that " + statement.content.gsub("'", %q(\\\'))
     convert = MiniMagick::Tool::Convert.new
+    convert << "("
     convert << "app/assets/images/weagreethat.png"
     convert << "-size"
-    convert << "992x960"
+    convert << "900x880"
     convert << "-extent"
-    convert << "1024x"
+    convert << "900x880"
     convert << "-font"
     convert << "helvetica"
     convert << "-weight"
     convert << "900"
     convert.gravity ("NorthWest")
-    convert << "caption:" + image_statement
+    convert << "caption:" + text_statement
+    convert << "-composite"
+    convert << ")"
+    convert << "app/assets/images/weagreethat_text.png"
+    convert.gravity ("Center")
     convert << "-composite"
     convert << "public/assets/images/" + statement.hashid + ".png"
     Rails.logger.debug convert.command
