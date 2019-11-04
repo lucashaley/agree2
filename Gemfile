@@ -107,6 +107,8 @@ group :development do
   gem "rails-erd"
   # https://github.com/presidentbeef/brakeman
   gem 'brakeman'
+  # https://github.com/mperham/sidekiq
+  gem 'sidekiq'
 end
 
 group :test do

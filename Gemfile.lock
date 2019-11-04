@@ -104,6 +104,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
+    connection_pool (2.2.2)
     crass (1.0.5)
     declarative (0.0.10)
     declarative-option (0.1.0)
@@ -217,6 +218,8 @@ GEM
     public_suffix (4.0.1)
     puma (3.12.1)
     rack (2.0.7)
+    rack-protection (2.0.7)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.3)
@@ -253,6 +256,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
+    redis (4.1.3)
     regexp_parser (1.6.0)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -293,6 +297,11 @@ GEM
     selenium-webdriver (3.142.6)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
+    sidekiq (6.0.3)
+      connection_pool (>= 2.2.2)
+      rack (>= 2.0.0)
+      rack-protection (>= 2.0.0)
+      redis (>= 4.1.0)
     signet (0.12.0)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -377,6 +386,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   sassc-rails (>= 2.1.0)
   selenium-webdriver
+  sidekiq
   spring
   spring-watcher-listen (~> 2.0.0)
   thumbs_up
