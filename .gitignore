@@ -69,4 +69,7 @@ yarn-debug.log*
 # get rid of Mac stuff
 .DS_Store
 
+# redis dump
+*.rdb
+
 erd.pdf
