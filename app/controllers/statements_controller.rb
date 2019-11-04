@@ -174,6 +174,9 @@ class StatementsController < ApplicationController
     Rails.logger.debug "CHILD: #{@statement.inspect}" # + @statement.inspect
     Rails.logger.debug '-------------'
 
+    Rails.logger.debug "\n\nCheck if unique\n\n"
+    redirect_to Statement.find_by_content(@statement.content) and return if not @statement.valid?
+
     respond_to do |format|
       if @statement.save
         Rails.logger.debug '-------------'

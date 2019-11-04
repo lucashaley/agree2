@@ -10,7 +10,7 @@ class Statement < ApplicationRecord
   include Hashid::Rails
 
   # Validations
-  validates :content, presence: true
+  validates :content, presence: true, uniqueness: { case_sensitive: false }
 
   # Relationships
   belongs_to :author, class_name: 'Voter'
