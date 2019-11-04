@@ -23,3 +23,4 @@ This is also my first experiment in deploying to Heroku.
 * https://github.com/basecamp/marginalia
 * https://guides.rubyonrails.org/testing.html
 * https://github.com/ankane/ahoy
+* https://itnext.io/sidekiq-overview-and-how-to-deploy-it-to-heroku-b8811fea9347
