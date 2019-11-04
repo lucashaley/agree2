@@ -69,6 +69,9 @@ gem 'mini_magick'
 # https://github.com/csquared/IMGKit
 gem 'imgkit'
 # https://cloud.google.com/natural-language/docs/basics#sentiment_analysis
+# https://cloud.google.com/ruby/?tab=tab4
+# https://github.com/googleapis/google-cloud-ruby
+# https://github.com/googleapis/google-cloud-ruby/tree/master/google-cloud-language
 gem 'google-cloud-language'
 # apparently we need this to deploy to heroku
 # https://stackoverflow.com/questions/34171147/rails-couldnt-find-file-jquery-ujs-with-type-application-javascript

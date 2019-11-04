@@ -144,7 +144,7 @@ class StatementsController < ApplicationController
         end
 
         # test refactor
-        # parse_statement(@statement.content)
+        parse_statement(@statement.content)
       }
       format.png {
         # this will change once we get cloud storage going on
@@ -328,24 +328,40 @@ class StatementsController < ApplicationController
 
     text_statement = "I agree that " + statement.content.gsub("'", %q(\\\'))
     convert = MiniMagick::Tool::Convert.new
-    convert << "("
-    convert << "app/assets/images/weagreethat.png"
-    convert << "-size"
-    convert << "900x880"
-    convert << "-extent"
-    convert << "900x880"
-    convert << "-font"
-    convert << "helvetica"
-    convert << "-weight"
-    convert << "900"
-    convert.gravity ("NorthWest")
-    convert << "caption:" + text_statement
-    convert << "-composite"
-    convert << ")"
-    convert << "app/assets/images/weagreethat_text.png"
-    convert.gravity ("Center")
-    convert << "-composite"
-    convert << "public/assets/images/" + statement.hashid + ".png"
+    # convert << "\("
+    # convert << "app/assets/images/weagreethat.png"
+    # convert << "-size"
+    # convert << "900x880"
+    # convert << "-extent"
+    # convert << "900x880"
+    # convert << "-font"
+    # convert << "helvetica"
+    # convert << "-weight"
+    # convert << "900"
+    # convert.gravity ("NorthWest")
+    # convert << "caption:" + text_statement
+    # convert << "-composite"
+    # convert << "\)"
+    # convert << "app/assets/images/weagreethat_text.png"
+    # convert.gravity ("Center")
+    # convert << "-composite"
+    # convert << "public/assets/images/" + statement.hashid + ".png"
+
+    # new version
+    convert << '-page'
+    convert << '0x0'
+    convert << 'app/assets/images/weagreethat.png'
+    convert << '-page'
+    convert << '+12+10'
+    convert << '-size'
+    convert << '888x870'
+    convert << '-font'
+    convert << 'helvetica-bold'
+    convert << "caption:#{text_statement}."
+    convert << '-layers'
+    convert << 'mosaic'
+    convert << "public/assets/images/#{statement.hashid}.png"
+
     Rails.logger.debug convert.command
     convert.call #=> `convert input.jpg -resize 100x100 -negate output.jpg`
 
@@ -358,37 +374,41 @@ class StatementsController < ApplicationController
 
   def parse_statement(text)
     Rails.logger.debug "\n-------- PARSE_STATEMENT START --------"
-    # GOOGLE NATURAL LANGUAGE
-    # Imports the Google Cloud client library
-    # ? does this need to be here?
-    require 'google/cloud/language'
-    # Instantiates a client
-    language = Google::Cloud::Language.new
-    # Detects the sentiment of the text
-    sentiment_req = language.analyze_sentiment content: text, type: :PLAIN_TEXT
-    # Analyzes syntax
-    syntax_req = language.analyze_syntax content: text, type: :PLAIN_TEXT
-    # Get document sentiment from response
-    sentiment = sentiment_req.document_sentiment
-    puts "Text: #{text}"
-    puts "Score: #{sentiment.score}, #{sentiment.magnitude}"
-    # Get syntax details
-    sentences = syntax_req.sentences
-    tokens    = syntax_req.tokens
+    # # GOOGLE NATURAL LANGUAGE
+    # # Imports the Google Cloud client library
+    # # ? does this need to be here?
+    # require 'google/cloud/language'
+    # # Instantiates a client
+    # language = Google::Cloud::Language.new
+    # # Detects the sentiment of the text
+    # sentiment_req = language.analyze_sentiment content: text, type: :PLAIN_TEXT
+    # # Analyzes syntax
+    # syntax_req = language.analyze_syntax content: text, type: :PLAIN_TEXT
+    # # Get document sentiment from response
+    # sentiment = sentiment_req.document_sentiment
+    # puts "Text: #{text}"
+    # puts "Score: #{sentiment.score}, #{sentiment.magnitude}"
+    # # Get syntax details
+    # sentences = syntax_req.sentences
+    # tokens    = syntax_req.tokens
+    #
+    # puts "Sentences: #{sentences.count}"
+    # puts "Tokens: #{tokens.count}"
+    #
+    # tokens.each do |token|
+    #   puts "#{token.part_of_speech.tag} #{token.text.content} #{token.part_of_speech.proper}"
+    # end
+    #
+    # puts tokens.first.part_of_speech
+    #
+    # if (tokens.first.part_of_speech.tag.eql? :NOUN) && (tokens.first.part_of_speech.proper.eql? :PROPER)
+    #   Rails.logger.debug "\n-------- PARSE_STATEMENT STARTS WITH PROPER NOUN --------"
+    # end
+    # tokens
 
-    puts "Sentences: #{sentences.count}"
-    puts "Tokens: #{tokens.count}"
-
-    tokens.each do |token|
-      puts "#{token.part_of_speech.tag} #{token.text.content} #{token.part_of_speech.proper}"
-    end
-
-    puts tokens.first.part_of_speech
-
-    if (tokens.first.part_of_speech.tag.eql? :NOUN) && (tokens.first.part_of_speech.proper.eql? :PROPER)
-      Rails.logger.debug "\n-------- PARSE_STATEMENT STARTS WITH PROPER NOUN --------"
-    end
-    tokens
+    # MeaningCloud
+    meaning_cloud = HTTParty.get("https://api.meaningcloud.com/sentiment-2.1?key=4935702876bc0158e849c1bf91e1f8d1&lang=en&verbose=y&txt=#{text}")
+    Rails.logger.debug "\n\n\nSentiment Results: #{meaning_cloud.parsed_response['score_tag']}\n\n\n"
   end
 
   private
