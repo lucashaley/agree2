@@ -40,11 +40,11 @@ class StatementCreateImage
     convert << '-size'
     convert << '888x870'
     convert << '-font'
-    convert << 'helvetica-bold'
+    convert << 'Nimbus-Sans-L-Bold'
     convert << "caption:#{text_statement}."
     convert << '-layers'
     convert << 'mosaic'
-    convert << "public/assets/images/#{hashid}.png"
+    convert << "#{Rails.root.join('tmp')}/#{hashid}.png"
 
     Rails.logger.debug convert.command
     convert.call #=> `convert input.jpg -resize 100x100 -negate output.jpg`
@@ -52,6 +52,6 @@ class StatementCreateImage
     # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
     # statement.statement_image.attach("public/assets/images/" + statement.hashid + ".png")
     # https://blog.capsens.eu/how-to-use-activestorage-in-your-rails-5-2-application-cdf3a3ad8d7
-    Statement.find(hashid).statement_image.attach(io: File.open("public/assets/images/#{hashid}.png"), filename: "#{hashid}.png")
+    Statement.find(hashid).statement_image.attach(io: File.open("#{Rails.root.join('tmp')}/#{hashid}.png"), filename: "#{hashid}.png")
   end
 end
