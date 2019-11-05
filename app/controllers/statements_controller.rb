@@ -144,7 +144,7 @@ class StatementsController < ApplicationController
         end
 
         # test refactor
-        parse_statement(@statement.content)
+        # parse_statement(@statement.content)
       }
       format.png {
         # this will change once we get cloud storage going on
