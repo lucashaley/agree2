@@ -14,6 +14,8 @@ This is also my first experiment in deploying to Heroku.
 * local sidekiq:
     * redis-server
     * bundle exec sidekiq
+* heroku run rake db:migrate
+
 
 ## Some things
 

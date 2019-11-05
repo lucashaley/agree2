@@ -4,13 +4,13 @@
 <meta property="og:type"               content="article" />
 <meta property="og:title"              content="We Can Agree" />
 <meta property="og:description"        content="And #{@statement.votes_for} people agree with me." />
-<meta property="og:image"              content='<%= polymorphic_url(@statement.statement_image) %>' />
+<meta property="og:image"              content='<%= polymorphic_url(@statement.statement_image) if @statement.image.attached? %>' />
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@WeAgreeThat">
 <meta name="twitter:creator" content="@WeAgreeThat">
 <meta name="twitter:title" content="I agree that…">
 <meta name="twitter:description" content="<%= @statement.content %>">
-<meta name="twitter:image" content="<%= polymorphic_url(@statement.statement_image) %>">
+<meta name="twitter:image" content="<%= polymorphic_url(@statement.statement_image) if @statement.image.attached? %>">
 <% end %>
 
 <div class="jumbotron">

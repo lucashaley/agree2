@@ -268,9 +268,15 @@ class StatementsController < ApplicationController
     end
     # Rails.logger.debug "\nnew_root: " + @new_root.inspect
 
+    Rails.logger.debug "\n\nCheck if unique\n\n"
+    redirect_to Statement.find_by_content(@statement.content) and return if not @statement.valid?
+
+
     respond_to do |format|
       # save it to database
       if @new_root.save
+        current_user.vote_for(@statement)
+        create_image(@statement)
         format.html { redirect_to @new_root, notice: 'Statement was successfully created. Share with your friends.' }
         format.json { render :show, status: :ok, location: @author }
         Rails.logger.debug "\n-------- CREATE ROOT SUCCESS --------"
