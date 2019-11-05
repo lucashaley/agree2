@@ -3,7 +3,7 @@
 <meta property="og:url"                content='<%= request.original_url %>' />
 <meta property="og:type"               content="article" />
 <meta property="og:title"              content="We Can Agree" />
-<meta property="og:description"        content="A website dedicated to finding common ground." />
+<meta property="og:description"        content="And #{@statement.votes_for} people agree with me." />
 <meta property="og:image"              content='<%= polymorphic_url(@statement.statement_image) %>' />
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@WeAgreeThat">
@@ -12,12 +12,6 @@
 <meta name="twitter:description" content="<%= @statement.content %>">
 <meta name="twitter:image" content="<%= polymorphic_url(@statement.statement_image) %>">
 <% end %>
-
-<%= link_to 'image', url_for(@statement.statement_image) %>
-<%= link_to rails_blob_path(@statement.statement_image, disposition: "attachment") %>
-<%= link_to @statement.statement_image.service_url %>
-<br />
-<%= link_to polymorphic_url(@statement.statement_image) %>
 
 <div class="jumbotron">
   <ul class="list-inline">
@@ -47,7 +41,11 @@
         </p>
       </div>
       <div class="col-xs-6 text-right">
-        <a id="shareBtn_facebook" class="btn btn-info btn-lg" role="button"><i class="fa fa-facebook-official"></i></a>
+        <div class="fb-share-button"
+          data-href="http://weagreethat-dev.herokuapps.com/statements/<%= @statement.hashid %>"
+          data-layout="button_count">
+        </div>
+        <a id="shareBtn_facebook" data-href="<%= request.original_url %>" class="btn btn-info btn-lg" role="button"><i class="fa fa-facebook-official"></i></a>
         <script>
           document.getElementById('shareBtn_facebook').onclick = function() {
             FB.ui({
