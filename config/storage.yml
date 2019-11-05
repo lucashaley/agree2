@@ -15,13 +15,13 @@ local:
 #   bucket: your_own_bucket
 
 # Remember not to checkin your GCS keyfile to a repository
-google-local:
+googlelocal:
   service: GCS
   project: we-agree-that
   credentials: <%= Rails.root.join("config/secrets/WeAgreeThat-7f7770a4fcaa.json") %>
   bucket: weagreethat-dev
 
-google-heroku:
+googleheroku:
   service: GCS
   project: we-agree-that
   # credentials: <%= Rails.root.join("config/secrets/WeAgreeThat-7f7770a4fcaa.json") %>
