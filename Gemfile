@@ -90,6 +90,8 @@ gem 'rubocop', '~> 0.76.0', require: false
 gem 'zaru'
 # https://github.com/jnunemaker/httparty
 gem 'httparty'
+# https://github.com/mperham/sidekiq
+gem 'sidekiq'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -107,8 +109,6 @@ group :development do
   gem "rails-erd"
   # https://github.com/presidentbeef/brakeman
   gem 'brakeman'
-  # https://github.com/mperham/sidekiq
-  gem 'sidekiq'
 end
 
 group :test do
