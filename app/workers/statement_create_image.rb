@@ -31,6 +31,13 @@ class StatementCreateImage
     # convert << "-composite"
     # convert << "public/assets/images/" + statement.hashid + ".png"
 
+    if Rails.env.development?
+      font = 'helvetica-bold'
+    elsif Rails.env.production?
+      font = 'Nimbus-Sans-L-Bold'
+    end
+
+
     # new version
     convert << '-page'
     convert << '0x0'
@@ -38,9 +45,9 @@ class StatementCreateImage
     convert << '-page'
     convert << '+12+10'
     convert << '-size'
-    convert << '888x870'
+    convert << '888x500'
     convert << '-font'
-    convert << 'Nimbus-Sans-L-Bold'
+    convert << "#{font}"
     convert << "caption:#{text_statement}."
     convert << '-layers'
     convert << 'mosaic'
