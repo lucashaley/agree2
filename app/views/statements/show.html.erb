@@ -2,18 +2,18 @@
 <title>We Agree That… <%= @statement.content.truncate(40, separator: ' ') %></title>
 <meta property="og:url"                content='<%= request.original_url %>' />
 <meta property="og:type"               content="article" />
-<meta property="og:title"              content=<%= full_statement(@statement.content) %> />
+<meta property="og:title"              content="<%= full_statement(@statement.content) %>" />
 <meta property="og:description"        content="And <%= @statement.votes_for %> people agree with me." />
-<meta property="og:image"              content='<%= polymorphic_url(@statement.image_twotoone) if @statement.image_twotoone.attached? %>' />
+<meta property="og:image"              content='<%= polymorphic_url(@statement.image_2to1) if @statement.image_2to1.attached? %>' />
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:site" content="@WeAgreeThat">
 <meta property="twitter:creator" content="@WeAgreeThat">
 <meta property="twitter:title" content="I agree that…">
-<meta property="twitter:description" content="<%= @statement.content %>">
-<meta property="twitter:image" content="<%= polymorphic_url(@statement.image_twotoone) if @statement.image_twotoone.attached? %>">
+<meta property="twitter:description" content="<%= full_statement(@statement.content) %>">
+<meta property="twitter:image" content="<%= polymorphic_url(@statement.image_2to1) if @statement.image_2to1.attached? %>">
 <% end %>
 
-<%= link_to '2to1', polymorphic_url(@statement.image_twotoone) if @statement.image_twotoone.attached? %>
+<%= link_to '2to1', polymorphic_url(@statement.image_2to1) if @statement.image_2to1.attached? %>
 
 <div class="jumbotron">
   <ul class="list-inline">

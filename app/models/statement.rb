@@ -21,7 +21,7 @@ class Statement < ApplicationRecord
   # ActiveStorage
   # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
   has_one_attached :statement_image
-  has_one_attached :image_twotoone
+  has_one_attached :image_2to1
   has_one_attached :image_square
 
   # Callbacks
@@ -32,7 +32,7 @@ class Statement < ApplicationRecord
     Rails.logger.debug "\n-------- CLEAN_STATEMENT Start --------\n"
 
     # remove initial capital
-    content[0] = content[0].downcase
+    # content[0] = content[0].downcase
 
     # remove last punctuation
     content.sub!(/[?.!,;]?$/, '')

@@ -19,7 +19,7 @@ Rails.application.routes.draw do
       post :agree
       post :disagree
       post :toggle_agree
-      get :image
+      # get :image
       get :image_2to1
       get :image_square
     end

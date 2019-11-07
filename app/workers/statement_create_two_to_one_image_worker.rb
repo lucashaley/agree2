@@ -15,13 +15,13 @@ class StatementCreateTwoToOneImageWorker
     convert << '880x440'
     convert << '-font'
     convert << "#{font}"
-    convert << "caption:#{image_statement(content)}."
+    convert << "caption:#{image_statement(content)}"
     convert << '-layers'
     convert << 'mosaic'
-    convert << "#{Rails.root.join('tmp')}/#{hashid}.png"
+    convert << "#{Rails.root.join('tmp')}/#{hashid}_2to1.png"
     convert.call
 
-    Statement.find(hashid).image_twotoone.attach(io: File.open("#{Rails.root.join('tmp')}/#{hashid}.png"), filename: "#{hashid}_twotoone.png")
+    Statement.find(hashid).image_2to1.attach(io: File.open("#{Rails.root.join('tmp')}/#{hashid}_2to1.png"), filename: "#{hashid}_2to1.png")
 
     logger.debug "\n\n------- StatementCreateTwoToOneImageWorker: perform start -------\n\n"
   end
