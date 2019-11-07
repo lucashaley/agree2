@@ -3,7 +3,7 @@
 class StatementsController < ApplicationController
   require "mini_magick"
 
-  before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree]
+  before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree, :image_square]
   before_action :set_parent, only: [:show, :update, :create]
   before_action :set_parent_for_new, only: [:create_child]
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_homepage
@@ -154,6 +154,17 @@ class StatementsController < ApplicationController
         # redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
       }
     end
+  end
+
+  def image_square
+    respond_to :png
+    Rails.logger.debug "\n\nIMAGE_SQUARE\n\n"
+    redirect_to @statement.image_square if @statement.image_square.attached?
+  end
+
+  def image_2to1
+    Rails.logger.debug "\n\nIMAGE_2to1\n\n"
+    redirect_to @statement.image_twotoone if @statement.image_twotoone.attached?
   end
 
   def create_child
@@ -336,6 +347,7 @@ class StatementsController < ApplicationController
     Rails.logger.debug "\n-------- create_image START --------\n"
 
     StatementCreateImage.perform_async(statement.hashid, statement.content)
+    StatementCreateTwoToOneImageWorker.perform_async(statement.hashid, statement.content)
     #
     # text_statement = "I agree that " + statement.content.gsub("'", %q(\\\'))
     # convert = MiniMagick::Tool::Convert.new

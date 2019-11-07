@@ -20,6 +20,8 @@ Rails.application.routes.draw do
       post :disagree
       post :toggle_agree
       get :image
+      get :image_2to1
+      get :image_square
     end
     resources :reports, only: [:create]
   end

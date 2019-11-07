@@ -21,6 +21,8 @@ class Statement < ApplicationRecord
   # ActiveStorage
   # https://guides.rubyonrails.org/v5.2.0/active_storage_overview.html
   has_one_attached :statement_image
+  has_one_attached :image_twotoone
+  has_one_attached :image_square
 
   # Callbacks
   before_create :clean_statement
