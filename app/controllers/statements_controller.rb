@@ -404,8 +404,8 @@ class StatementsController < ApplicationController
     meaning_cloud_category = HTTParty.get("https://api.meaningcloud.com/deepcategorization-1.0?key=4935702876bc0158e849c1bf91e1f8d1&lang=en&verbose=y&model=IAB_2.0_en&txt=#{text}")
     Rails.logger.debug "\n\n\nCategory Results: #{meaning_cloud_category.parsed_response['score_tag']}\n\n\n"
     nutrino_swear = HTTParty.post('https://neutrinoapi.com/bad-word-filter',
-      :body => { "user-id" => 'lucashaley',
-               "api-key" => 'AG5l7Hk9OTOTCU7UaddIXbuf51RYhaq5vPdOyPIYzCYXpMOR',
+      :body => { "user-id" => ENV['AGREE_NUTRINO_USER'],
+               "api-key" => ENV['AGREE_NUTRINO_KEY'],
                "content" => text,
                }.to_json,
       :headers => { 'Content-Type' => 'application/json' })
