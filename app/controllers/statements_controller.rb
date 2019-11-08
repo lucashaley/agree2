@@ -198,6 +198,9 @@ class StatementsController < ApplicationController
         # create the image
         # ? is this the best place for this?
         create_image(@statement)
+        # parse statement
+        parse_statement(@statement.content)
+
         format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
         format.json { render :show, status: :created, location: @statement }
       else
@@ -252,9 +255,12 @@ class StatementsController < ApplicationController
 
     respond_to do |format|
       if @statement.save
-        # create the image
-        # ? is this the best place for this?
+
+        # create images
         create_image(@statement)
+        # parse statement
+        parse_statement(@statement.content)
+
         format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
         format.json { render :show, status: :created, location: @statement }
       else
@@ -287,7 +293,12 @@ class StatementsController < ApplicationController
       # save it to database
       if @new_root.save
         current_user.vote_for(@new_root)
+
+        # create images
         create_image(@new_root)
+        # parse statement
+        parse_statement(@new_root.content)
+
         format.html { redirect_to @new_root, notice: 'Statement was successfully created. Share with your friends.' }
         format.json { render :show, status: :ok, location: @author }
         Rails.logger.debug "\n-------- CREATE ROOT SUCCESS --------"
@@ -389,9 +400,16 @@ class StatementsController < ApplicationController
 
     # MeaningCloud
     meaning_cloud_sentiment = HTTParty.get("https://api.meaningcloud.com/sentiment-2.1?key=4935702876bc0158e849c1bf91e1f8d1&lang=en&verbose=y&txt=#{text}")
-    Rails.logger.debug "\n\n\nSentiment Results: #{meaning_cloud.parsed_response['score_tag']}\n\n\n"
-    meaning_cloud_category = HTTParty.get("https://api.meaningcloud.com/deepcategorization-1.0?key=4935702876bc0158e849c1bf91e1f8d1&lang=en&verbose=y&txt=#{text}")
-    Rails.logger.debug "\n\n\nCategory Results: #{meaning_cloud.parsed_response['score_tag']}\n\n\n"
+    Rails.logger.debug "\n\n\nSentiment Results: #{meaning_cloud_sentiment.parsed_response['score_tag']}\n\n\n"
+    meaning_cloud_category = HTTParty.get("https://api.meaningcloud.com/deepcategorization-1.0?key=4935702876bc0158e849c1bf91e1f8d1&lang=en&verbose=y&model=IAB_2.0_en&txt=#{text}")
+    Rails.logger.debug "\n\n\nCategory Results: #{meaning_cloud_category.parsed_response['score_tag']}\n\n\n"
+    nutrino_swear = HTTParty.post('https://neutrinoapi.com/bad-word-filter',
+      :body => { "user-id" => 'lucashaley',
+               "api-key" => 'AG5l7Hk9OTOTCU7UaddIXbuf51RYhaq5vPdOyPIYzCYXpMOR',
+               "content" => text,
+               }.to_json,
+      :headers => { 'Content-Type' => 'application/json' })
+    Rails.logger.debug "\n\n\nSwear Results: #{nutrino_swear.parsed_response['bad-words-total']}\n\n\n"
   end
 
   private
