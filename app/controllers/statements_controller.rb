@@ -9,12 +9,8 @@ class StatementsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_homepage
 
   def agree
-    Rails.logger.debug '-------------'
-    Rails.logger.debug 'AGREE'
-    Rails.logger.debug '-------------'
-    Rails.logger.debug '-------------'
-    Rails.logger.debug current_user
-    Rails.logger.debug '-------------'
+    Rails.logger.debug "\n\n------------- AGREE start -------------\n\n"
+
     begin
       vote = current_user.vote_for(@statement)
       Rails.logger.debug vote.inspect

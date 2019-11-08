@@ -22,7 +22,7 @@
   <% end %>
   </ul>
   <h3 id='like-post-container'>
-    <%= render partial: "agree", locals: {statement: @statement} %>
+    <%= who_agrees(@statement) %>
   </h3>
   <h1>…<%= @statement.content %></h1>
   <div class="row">
@@ -78,7 +78,9 @@
       <a class="btn btn-warning btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Cancel</a>
       <%= f.submit "Submit variant and agree", class: "btn btn-success btn-lg" %>
       <% end %>
-      <p>If you'd like to create an entirely new statement, click here.</p>
+      <div>
+        <h4>If you'd like to create an entirely new statement, click here.</h4>
+      </div>
     </div>
   </div>
 </div>
