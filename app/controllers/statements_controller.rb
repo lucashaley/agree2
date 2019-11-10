@@ -8,70 +8,6 @@ class StatementsController < ApplicationController
   before_action :set_parent_for_new, only: [:create_child]
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_homepage
 
-  def agree
-    Rails.logger.debug "\n\n------------- AGREE start -------------\n\n"
-
-    begin
-      vote = current_user.vote_for(@statement)
-      Rails.logger.debug vote.inspect
-
-      respond_to do |format|
-        format.html { redirect_back fallback_location: root_path }
-        format.js {}
-      end
-      # render :nothing => true, :status => 200
-    rescue ActiveRecord::RecordInvalid
-      render nothing: true, status: 404
-    rescue ActiveRecord::RecordNotFound
-      render nothing: true, status: 404
-    end
-  end
-
-  def disagree
-    begin
-      current_user.unvote_for(@statement)
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.js {}
-      end
-    rescue ActiveRecord::RecordInvalid
-      render nothing: true, status: 404
-    end
-  end
-
-  def toggle_agree
-    Rails.logger.debug '-------------'
-    Rails.logger.debug 'TOGGLE_AGREE start'
-    Rails.logger.debug '-------------'
-
-    begin
-      if current_user.voted_for?(@statement)
-        current_user.unvote_for(@statement)
-      else
-        vote = current_user.vote_for(@statement)
-
-        # this section adds the country to the vote
-        # clearly not the best way or place to do this.
-        if Rails.env.production?
-          ip = request.remote_ip
-        else
-          ip = Net::HTTP.get(URI.parse('http://checkip.amazonaws.com/')).squish
-        end
-        country_code = HTTParty.get("http://ip-api.com/line/#{ip}?fields=countryCode").body.strip
-        vote.update_column(:country, country_code)
-      end
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.js {}
-      end
-      # render :nothing => true, :status => 200
-    rescue ActiveRecord::RecordInvalid
-      render nothing: true, status: 404
-    rescue ActiveRecord::RecordNotFound
-      render nothing: true, status: 404
-    end
-  end
-
   def home
     @agreed = false
     # create a temporary child in case they want to make a variant
@@ -79,11 +15,7 @@ class StatementsController < ApplicationController
     # @child.parent_id = 1
     # get the first one
     @statement = Statement.find(1)
-    @top_ten = Statement.tally({
-                                 at_least: 1,
-                                 limit: 10,
-                                 order: 'vote_count desc'
-                               })
+    @top_ten = Statement.top(10)
     if current_user
       @agreed = current_user.voted_for?(@statement)
       Rails.logger.debug '-------------'
@@ -98,11 +30,7 @@ class StatementsController < ApplicationController
     @statements = Statement.all
     # @top_ten = Statement.tally.order(:votes_for)
     @tags = Statement.tag_counts_on(:tags)
-    @top_ten = Statement.tally({
-                                 :at_least => 1,
-                                 :limit => 10,
-                                 :order => 'vote_count desc'
-                               })
+    @top_ten = Statement.top(10)
     @most_recent = Statement.order('created_at desc').limit(10)
   end
 
@@ -149,6 +77,76 @@ class StatementsController < ApplicationController
 
         # redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
       }
+    end
+  end
+
+  def agree
+    Rails.logger.debug "\n\n------------- agree start -------------\n\n"
+
+    begin
+      vote = current_user.vote_for(@statement)
+      Rails.logger.debug vote.inspect
+
+      @statement.update_vote_count
+
+      respond_to do |format|
+        format.html { redirect_back fallback_location: root_path }
+        format.js {}
+      end
+      # render :nothing => true, :status => 200
+    rescue ActiveRecord::RecordInvalid
+      render nothing: true, status: 404
+    rescue ActiveRecord::RecordNotFound
+      render nothing: true, status: 404
+    end
+  end
+
+  def disagree
+    Rails.logger.debug "\n\n------------- disagree start -------------\n\n"
+    begin
+      current_user.unvote_for(@statement)
+      respond_to do |format|
+        format.html { redirect_to :back }
+        format.js {}
+      end
+    rescue ActiveRecord::RecordInvalid
+      render nothing: true, status: 404
+    end
+  end
+
+  def toggle_agree
+    Rails.logger.debug '-------------'
+    Rails.logger.debug 'TOGGLE_AGREE start'
+    Rails.logger.debug '-------------'
+
+    begin
+      if current_user.voted_for?(@statement)
+        current_user.unvote_for(@statement)
+      else
+        vote = current_user.vote_for(@statement)
+
+        # this section adds the country to the vote
+        # clearly not the best way or place to do this.
+        if Rails.env.production?
+          ip = request.remote_ip
+        else
+          ip = Net::HTTP.get(URI.parse('http://checkip.amazonaws.com/')).squish
+        end
+        country_code = HTTParty.get("http://ip-api.com/line/#{ip}?fields=countryCode").body.strip
+        vote.update_column(:country, country_code)
+      end
+
+      @statement.update_vote_count
+
+      respond_to do |format|
+        format.html { redirect_to :back }
+        format.js {}
+      end
+      # render :nothing => true, :status => 200
+    rescue ActiveRecord::RecordInvalid
+      render nothing: true, status: 404
+    rescue ActiveRecord::RecordNotFound
+      render nothing: true, status: 404
     end
   end
 
@@ -445,6 +443,10 @@ class StatementsController < ApplicationController
     end
     Rails.logger.debug "\n\n-------- SET_PARENT end --------\n\n"
   end
+
+  # def top_ten
+  #   Statement.plusminus_tally.limit(10)
+  # end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def statement_params_new

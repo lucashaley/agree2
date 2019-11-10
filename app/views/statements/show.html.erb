@@ -13,23 +13,33 @@
 <meta property="twitter:image" content="<%= polymorphic_url(@statement.image_2to1) if @statement.image_2to1.attached? %>">
 <% end %>
 
-<%= link_to '2to1', polymorphic_url(@statement.image_2to1) if @statement.image_2to1.attached? %>
-
 <div class="jumbotron">
   <ul class="list-inline">
   <% @statement.tags.each do |tag| %>
-    <li><%= link_to tag.name, tag_path(tag.name), class: "btn btn-default btn-sm", role: "button" %></li>
+    <li><%= link_to tag.name,
+                    tag_path(tag.name),
+                    class: "btn btn-default btn-sm",
+                    role: "button" %></li>
   <% end %>
   </ul>
-  <h3 id='like-post-container'>
-    <%= who_agrees(@statement) %>
-  </h3>
+  <%= render partial: "statements/partials/agree",
+              locals: {statement: @statement} %>
   <h1>…<%= @statement.content %></h1>
   <div class="row">
     <div class="collapse.show" id="agree_section">
       <div class="col-xs-6">
         <p>
-        <%= link_to @agreed ? 'Unagree' : 'Agree', toggle_agree_statement_path(@statement), type: 'button', id: "agree_btn", class: @css_string, "data-toggle"=>"button", "aria-pressed"=>"#{@agreed}", "data-agree-text"=>"Unagree", "data-unagree-text"=>"Agree", :method => :post, :remote => :true %>
+        <%= link_to @agreed ? 'Unagree' : 'Agree',
+                    toggle_agree_statement_path(@statement),
+                    type: 'button',
+                    id: "agree_btn",
+                    class: @css_string,
+                    "data-toggle"=>"button",
+                    "aria-pressed"=>"#{@agreed}",
+                    "data-agree-text"=>"Unagree",
+                    "data-unagree-text"=>"Agree",
+                    :method => :post,
+                    :remote => :true %>
         <script>
           $('#agree_btn').on('click', function () {
             if ($(this).hasClass('active')){
@@ -125,7 +135,7 @@
       <div class="col-sm-6 col-xs-12">
         <h2>Variations</h2>
         <div class="list-group">
-          <%= render partial: "listitem", collection: @statement.leaves, as: :statement %>
+          <%= render partial: "statements/partials/list_statements", collection: @statement.top(10), as: :statement %>
         </div>
       </div>
       <div class="col-sm-6 col-xs-12">

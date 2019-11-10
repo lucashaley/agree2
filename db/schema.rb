@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_04_210648) do
+ActiveRecord::Schema.define(version: 2019_11_09_104048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2019_11_04_210648) do
     t.bigint "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "vote_count"
     t.index ["author_id"], name: "index_statements_on_author_id"
     t.index ["content"], name: "index_statements_on_content", unique: true
     t.index ["parent_id"], name: "index_statements_on_parent_id"

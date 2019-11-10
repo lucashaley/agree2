@@ -3,51 +3,43 @@
 <% end %>
 
 <div class="jumbotron">
-  <h3>
-  <% if @statement.votes_for > 2 %>
-    <% if @agreed %>
-    You and <%= @statement.votes_for - 1 %> people agree that…
-    <% else %>
-    <%= @statement.votes_for %> people agree that…
-    <% end %>
-  <% elsif @statement.votes_for == 2 %>
-    <% if @agreed %>
-    You and 1 other person agree that…
-    <% else %>
-    Two people agree that…
-    <% end %>
-  <% elsif @statement.votes_for == 1 %>
-    <% if @agreed %>
-    You are the only person to agree that…
-    <% else %>
-    One person agrees that…
-    <% end %>
-  <% else %>
-    Nobody yet agrees that…
-  <% end %>
-  </h3>
+  <%= render partial: "statements/partials/agree", locals: {statement: @statement} %>
   <h1>…<%= @statement.content %></h1>
   <div class="row">
     <div class="col-xs-6">
-      <% if @agreed %>
-      <%= link_to('Unagree', disagree_statement_path(@statement), :method => :post, class: "btn btn-danger btn-lg") %>
-      <% else %>
-      <%= link_to('Agree', agree_statement_path(@statement), :method => :post, class: "btn btn-success btn-lg") %>
-      <% end %>
-      <a class="btn btn-info btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create New</a>
+      <p>
+      <%= link_to @agreed ? 'Unagree' : 'Agree',
+                  toggle_agree_statement_path(@statement),
+                  type: 'button',
+                  id: "agree_btn",
+                  class: @css_string,
+                  "data-toggle"=>"button",
+                  "aria-pressed"=>"#{@agreed}",
+                  "data-agree-text"=>"Unagree",
+                  "data-unagree-text"=>"Agree",
+                  :method => :post,
+                  :remote => :true %>
+      <script>
+        $('#agree_btn').on('click', function () {
+          if ($(this).hasClass('active')){
+            $(this).button('unagree')
+          } else {
+            $(this).button('agree')
+          }
+        })
+      </script>
+      <a class="btn btn-info btn-lg"
+          role="button"
+          data-toggle="collapse"
+          href="#new_child"
+          aria-expanded="false"
+          aria-controls="new_child">Create New</a>
+      </p>
     </div>
     <div class="col-xs-6 text-right">
       <a class="btn btn-warning btn-lg" role="button">Report</a>
     </div>
   </div>
-  <!-- <p>
-  <% if @agreed %>
-  <%= link_to('Unagree', disagree_statement_path(@statement), :method => :post, class: "btn btn-danger btn-lg") %>
-  <% else %>
-  <%= link_to('Agree', agree_statement_path(@statement), :method => :post, class: "btn btn-success btn-lg") %>
-  <% end %>
-  <a class="btn btn-info btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create New</a>
-  </p> -->
 
   <div class="collapse" id="new_child">
     <div class="well text-center">
@@ -82,7 +74,7 @@
       <div class="col-sm-6 col-xs-12">
         <h2>Top Statements</h2>
         <div class="list-group">
-          <%= render partial: "listitem", collection: @top_ten, as: :statement %>
+          <%= render partial: "statements/partials/list_statements", collection: @top_ten, as: :statement %>
         </div>
       </div>
       <div class="col-sm-6 col-xs-12">
