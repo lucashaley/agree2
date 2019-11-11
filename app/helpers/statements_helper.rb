@@ -33,4 +33,12 @@ module StatementsHelper
       return "Nobody yet agrees that…"
     end
   end
+
+  def agree_button_css
+    @css_string = 'btn btn-success btn-lg'
+    if current_user
+      @css_string += ' active' if current_user.voted_for?(@statement)
+    end
+    @css_string
+  end
 end
