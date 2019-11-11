@@ -18,9 +18,11 @@ class StatementsController < ApplicationController
     @top_ten = Statement.top(10)
     if current_user
       @agreed = current_user.voted_for?(@statement)
-      Rails.logger.debug '-------------'
-      Rails.logger.debug "VOTED: #{@agreed}"
-      Rails.logger.debug '-------------'
+    end
+
+    @css_string = 'btn btn-success btn-lg'
+    if @agreed
+      @css_string += ' active'
     end
   end
 
@@ -78,6 +80,15 @@ class StatementsController < ApplicationController
         # redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
       }
     end
+  end
+
+  def tag
+    Rails.logger.debug "\n\n------------- tag start -------------\n\n"
+    # Rails.logger.debug tag_params.inspect
+    @tag = tag_params[:tag]
+    @tagged_statements = Statement.tagged_with(tag_params[:tag])
+    # Rails.logger.debug @tagged_statements.inspect
+    Rails.logger.debug "\n\n------------- tag end -------------\n\n"
   end
 
   def agree
@@ -467,5 +478,9 @@ class StatementsController < ApplicationController
 
   def search_params
     params.permit(:utf8, :commit, q: [:content_cont]).to_h
+  end
+
+  def tag_params
+    params.permit(:tag)
   end
 end

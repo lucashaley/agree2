@@ -1,0 +1,20 @@
+<% content_for :head do %>
+<title>We Agree That… tagged with '<%= @tag %>'</title>
+<% end %>
+
+<div class="row">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2>Statements tagged with '<%= @tag %>'</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <div class="list-group">
+          <%= render partial: "statements/partials/list_statements", collection: @tagged_statements, as: :statement %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

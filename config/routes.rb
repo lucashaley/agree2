@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   # end
 
   # https://rubyplus.com/articles/4231-Tagging-using-Acts-as-Taggable-On-in-Rails-5
-  get 'tags/:tag', to: 'statements#index', as: :tag
+  get 'tags/:tag', to: 'statements#tag', as: :tag
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "statements#home", page: "home"

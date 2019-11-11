@@ -6,38 +6,40 @@
   <%= render partial: "statements/partials/agree", locals: {statement: @statement} %>
   <h1>…<%= @statement.content %></h1>
   <div class="row">
-    <div class="col-xs-6">
-      <p>
-      <%= link_to @agreed ? 'Unagree' : 'Agree',
-                  toggle_agree_statement_path(@statement),
-                  type: 'button',
-                  id: "agree_btn",
-                  class: @css_string,
-                  "data-toggle"=>"button",
-                  "aria-pressed"=>"#{@agreed}",
-                  "data-agree-text"=>"Unagree",
-                  "data-unagree-text"=>"Agree",
-                  :method => :post,
-                  :remote => :true %>
-      <script>
-        $('#agree_btn').on('click', function () {
-          if ($(this).hasClass('active')){
-            $(this).button('unagree')
-          } else {
-            $(this).button('agree')
-          }
-        })
-      </script>
-      <a class="btn btn-info btn-lg"
-          role="button"
-          data-toggle="collapse"
-          href="#new_child"
-          aria-expanded="false"
-          aria-controls="new_child">Create New</a>
-      </p>
-    </div>
-    <div class="col-xs-6 text-right">
-      <a class="btn btn-warning btn-lg" role="button">Report</a>
+    <div class="collapse.show" id="agree_section">
+      <div class="col-xs-6">
+        <p>
+        <%= link_to @agreed ? 'Unagree' : 'Agree',
+                    toggle_agree_statement_path(@statement),
+                    type: 'button',
+                    id: "agree_btn",
+                    class: agree_button_css,
+                    "data-toggle"=>"button",
+                    "aria-pressed"=>"#{@agreed}",
+                    "data-agree-text"=>"Unagree",
+                    "data-unagree-text"=>"Agree",
+                    :method => :post,
+                    :remote => :true %>
+        <script>
+          $('#agree_btn').on('click', function () {
+            if ($(this).hasClass('active')){
+              $(this).button('unagree')
+            } else {
+              $(this).button('agree')
+            }
+          })
+        </script>
+        <a class="btn btn-info btn-lg"
+            role="button"
+            data-toggle="collapse"
+            href="#new_child"
+            aria-expanded="false"
+            aria-controls="new_child">Create New</a>
+        </p>
+      </div>
+      <div class="col-xs-6 text-right">
+        <a class="btn btn-warning btn-lg" role="button">Report</a>
+      </div>
     </div>
   </div>
 
