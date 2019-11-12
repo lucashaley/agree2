@@ -33,6 +33,12 @@ class Statement < ApplicationRecord
   scope :recent, -> { order(:created_at).reverse_order }
   scope :top, -> { order(:vote_count).reverse_order }
 
+  ASPECTS = {
+    "square"  => "880x880",
+    "2to1" => "88x440"
+  }
+
+
   def clean_statement
     Rails.logger.debug "\n-------- CLEAN_STATEMENT Start --------\n"
 
@@ -83,5 +89,27 @@ class Statement < ApplicationRecord
     self.descendants.find { |descendant|
       voter.voted_for?(descendant)
     }
+  end
+
+  def create_image(aspect)
+    # an this be an instance method?
+    convert = MiniMagick::Tool::Convert.new
+    convert << '-page'
+    convert << '0x0'
+    convert << 'app/assets/images/weagreethat_twotoone.png'
+    convert << '-page'
+    convert << '+12+10'
+    convert << '-size'
+    convert << ASPECT[aspect]
+    convert << '-font'
+    convert << "#{font}"
+    convert << "caption:#{image_statement(content)}"
+    convert << '-layers'
+    convert << 'mosaic'
+    convert << "#{Rails.root.join('tmp')}/#{hashid}_#{aspect}.png"
+    convert.call
+
+    Statement.find(hashid).image_2to1.attach(io: File.open("#{Rails.root.join('tmp')}/#{hashid}_#{aspect}.png"), filename: "#{hashid}_#{aspect}.png")
+    # turn this into send method?
   end
 end
