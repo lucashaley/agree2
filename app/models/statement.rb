@@ -56,7 +56,7 @@ class Statement < ApplicationRecord
   # this can't be after save! What about associations?
   def update_vote_count
     Rails.logger.debug "\n-------- update_vote_count start --------\n"
-    update_attribute(:vote_count, self.plusminus)
+    update_attribute(:vote_count, self.votes_for)
     # self.vote_count = self.plusminus
     Rails.logger.debug "\n-------- update_vote_count end --------\n"
   end

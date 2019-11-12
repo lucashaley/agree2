@@ -32,8 +32,8 @@ class StatementsController < ApplicationController
     @statements = Statement.all
     # @top_ten = Statement.tally.order(:votes_for)
     @tags = Statement.tag_counts_on(:tags)
-    @top_ten = Statement.top.limit(10)
-    @most_recent = Statement.recent.limit(10)
+    @top_ten = Statement.top.limit(10).includes(:votes)
+    @most_recent = Statement.recent.limit(10).includes(:votes)
   end
 
   # GET /statements/1
@@ -167,7 +167,11 @@ class StatementsController < ApplicationController
         else
           ip = Net::HTTP.get(URI.parse('http://checkip.amazonaws.com/')).squish
         end
-        country_code = HTTParty.get("http://ip-api.com/line/#{ip}?fields=countryCode").body.strip
+        if ip.present?
+          country_code = HTTParty.get("http://ip-api.com/line/#{ip}?fields=countryCode").body.strip
+        else
+          country_code = "XX"
+        end
         vote.update_column(:country, country_code)
       end
 
