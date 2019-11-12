@@ -18,3 +18,22 @@
     </div>
   </div>
 </div>
+
+<div class="row">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <h2>Top Statements</h2>
+        <div class="list-group">
+          <%= render partial: "statements/partials/list_statements", collection: @tagged_statements_top, as: :statement %>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-12">
+        <h2>Most Recent</h2>
+        <div class="list-group">
+          <%= render partial: "statements/partials/list_statements", collection: @tagged_statements_recent, as: :statement %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

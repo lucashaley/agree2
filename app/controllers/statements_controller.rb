@@ -15,7 +15,7 @@ class StatementsController < ApplicationController
     # @child.parent_id = 1
     # get the first one
     @statement = Statement.find(1)
-    @top_ten = Statement.top(10)
+    @top_ten = Statement.top.limit(10)
     if current_user
       @agreed = current_user.voted_for?(@statement)
     end
@@ -32,8 +32,8 @@ class StatementsController < ApplicationController
     @statements = Statement.all
     # @top_ten = Statement.tally.order(:votes_for)
     @tags = Statement.tag_counts_on(:tags)
-    @top_ten = Statement.top(10)
-    @most_recent = Statement.order('created_at desc').limit(10)
+    @top_ten = Statement.top.limit(10)
+    @most_recent = Statement.recent.limit(10)
   end
 
   # GET /statements/1
@@ -49,6 +49,9 @@ class StatementsController < ApplicationController
           @diff_left = Diffy::SplitDiff.new(@parent.content, @statement.content, :format => :html).left.html_safe
           @diff_right = Diffy::SplitDiff.new(@parent.content, @statement.content, :format => :html).right.html_safe
         end
+
+        @voted_ancestor = @statement.voted_ancestor(current_user)
+        @voted_descendant = @statement.voted_descendant(current_user)
 
         # create a temporary child in case they want to make a variant
         @child = Statement.new
@@ -75,7 +78,13 @@ class StatementsController < ApplicationController
       format.png {
         # this will change once we get cloud storage going on
         # redirect_to "/assets/images/" + @statement.hashid + ".png"
-        redirect_to @statement.statement_image
+        if @statement.statement_image.attached?
+          redirect_to polymorphic_url(@statement.statement_image)
+        elsif @statement.image_square.attached?
+          redirect_to polymorphic_url(@statement.image_square)
+        elsif @statement.image_2to1.attached?
+          redirect_to polymorphic_url(@statement.image_2to1)
+        end
 
         # redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
       }
@@ -86,44 +95,49 @@ class StatementsController < ApplicationController
     Rails.logger.debug "\n\n------------- tag start -------------\n\n"
     # Rails.logger.debug tag_params.inspect
     @tag = tag_params[:tag]
-    @tagged_statements = Statement.tagged_with(tag_params[:tag])
+    @tagged_statements_top = Statement.tagged_with(@tag).top.limit(10)
+    @tagged_statements_recent = Statement.tagged_with(@tag).recent.limit(10)
     # Rails.logger.debug @tagged_statements.inspect
     Rails.logger.debug "\n\n------------- tag end -------------\n\n"
   end
-
-  def agree
-    Rails.logger.debug "\n\n------------- agree start -------------\n\n"
-
-    begin
-      vote = current_user.vote_for(@statement)
-      Rails.logger.debug vote.inspect
-
-      @statement.update_vote_count
-
-      respond_to do |format|
-        format.html { redirect_back fallback_location: root_path }
-        format.js {}
-      end
-      # render :nothing => true, :status => 200
-    rescue ActiveRecord::RecordInvalid
-      render nothing: true, status: 404
-    rescue ActiveRecord::RecordNotFound
-      render nothing: true, status: 404
-    end
-  end
-
-  def disagree
-    Rails.logger.debug "\n\n------------- disagree start -------------\n\n"
-    begin
-      current_user.unvote_for(@statement)
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.js {}
-      end
-    rescue ActiveRecord::RecordInvalid
-      render nothing: true, status: 404
-    end
-  end
+  #
+  # def agree
+  #   Rails.logger.debug "\n\n------------- agree start -------------\n\n"
+  #
+  #   begin
+  #     # find next vote up ancestor tree
+  #     @voted_ancestor = @statement.ancestors.voted_for?
+  #     Rails.logger.debug @voted_ancestor.inspect
+  #
+  #     vote = current_user.vote_for(@statement)
+  #     # Rails.logger.debug vote.inspect
+  #
+  #     @statement.update_vote_count
+  #
+  #     respond_to do |format|
+  #       format.html { redirect_back fallback_location: root_path }
+  #       format.js {}
+  #     end
+  #     # render :nothing => true, :status => 200
+  #   rescue ActiveRecord::RecordInvalid
+  #     render nothing: true, status: 404
+  #   rescue ActiveRecord::RecordNotFound
+  #     render nothing: true, status: 404
+  #   end
+  # end
+  #
+  # def disagree
+  #   Rails.logger.debug "\n\n------------- disagree start -------------\n\n"
+  #   begin
+  #     current_user.unvote_for(@statement)
+  #     respond_to do |format|
+  #       format.html { redirect_to :back }
+  #       format.js {}
+  #     end
+  #   rescue ActiveRecord::RecordInvalid
+  #     render nothing: true, status: 404
+  #   end
+  # end
 
   def toggle_agree
     Rails.logger.debug '-------------'
@@ -134,6 +148,16 @@ class StatementsController < ApplicationController
       if current_user.voted_for?(@statement)
         current_user.unvote_for(@statement)
       else
+        # find next vote up ancestor tree
+        # get all ancestors
+        @ancestors = @statement.ancestors
+        Rails.logger.debug "\n\n--------- ancestors: #{@ancestors.inspect}\n\n"
+        # traverse ancestors to find voted_for
+        @voted_ancestor = @ancestors.find { |ancestor|
+          current_user.voted_for?(ancestor)
+        }
+        Rails.logger.debug "\n\n--------- voted_ancestor: #{@voted_ancestor.inspect}\n\n"
+
         vote = current_user.vote_for(@statement)
 
         # this section adds the country to the vote
@@ -159,6 +183,31 @@ class StatementsController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       render nothing: true, status: 404
     end
+  end
+
+  # this is where the actual agreeing happens
+  def agree
+    Rails.logger.debug "\n\n--------- agree start --------\n\n"
+
+    @ancestors = @statement.ancestors
+    # traverse ancestors to find voted_for
+    @voted_ancestor = @ancestors.find { |ancestor|
+      current_user.voted_for?(ancestor)
+    }
+
+    vote = current_user.vote_for(@statement)
+
+    # this section adds the country to the vote
+    # clearly not the best way or place to do this.
+    if Rails.env.production?
+      ip = request.remote_ip
+    else
+      ip = Net::HTTP.get(URI.parse('http://checkip.amazonaws.com/')).squish
+    end
+    country_code = HTTParty.get("http://ip-api.com/line/#{ip}?fields=countryCode").body.strip
+    vote.update_column(:country, country_code)
+
+    Rails.logger.debug "\n\n--------- agree end --------\n\n"
   end
 
   def image_square

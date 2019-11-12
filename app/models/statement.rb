@@ -29,6 +29,10 @@ class Statement < ApplicationRecord
   # around_save :save_statement
   # after_save :update_vote_count
 
+  # Scopes
+  scope :recent, -> { order(:created_at).reverse_order }
+  scope :top, -> { order(:vote_count).reverse_order }
+
   def clean_statement
     Rails.logger.debug "\n-------- CLEAN_STATEMENT Start --------\n"
 
@@ -58,13 +62,26 @@ class Statement < ApplicationRecord
   end
 
   # putting 'self' beforehand turns this into a class method!
-  def self.top(count)
-    Statement.plusminus_tally.limit(count)
-  end
+  # def self.top(count)
+  #   Statement.plusminus_tally.limit(count)
+  # end
 
   def top(count)
     # this just gets the direct children
     # children.plusminus_tally.limit(count)
-    descendants.limit(count).reverse
+    descendants.limit(count).reverse_order
+  end
+
+  def voted_ancestor(voter)
+    # traverse ancestors to find voted_for
+    self.ancestors.find { |ancestor|
+      voter.voted_for?(ancestor)
+    }
+  end
+
+  def voted_descendant(voter)
+    self.descendants.find { |descendant|
+      voter.voted_for?(descendant)
+    }
   end
 end

@@ -72,6 +72,8 @@
       </div>
     </div>
   </div>
+  <%= render partial: "statements/partials/previously_agreed", locals: {voted: @voted_ancestor} if @voted_ancestor.present? %>
+  <%= render partial: "statements/partials/previously_agreed", locals: {voted: @voted_descendant} if @voted_descendant.present? %>
   <div class="collapse" id="new_child">
     <div class="well text-center">
       <h3>Modify the text to improve it!</h3>
