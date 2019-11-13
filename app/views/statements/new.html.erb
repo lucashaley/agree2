@@ -9,25 +9,5 @@
       Instead, you agree that…
     </h3>
   </div>
-  <div class="row">
-    <div class="well text-center">
-      <form>
-        <textarea style="outline: none; font-family:Helvetica;
-  	font-weight:bold; font-size:36px; width:100%; -webkit-box-sizing: border-box; border: 0px solid #fff; background-color:rgb(245,245,245);">…</textarea>
-      </form>
-    </div>
-  </div>
-  <div class="row">
-    <div class="well text-left">
-      <h5>Tags (comma-separated)</h5>
-      <input type="text" style="outline: none; font-family:Helvetica;
-  font-weight:bold; font-size:24px; width:100%">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col text-right">
-      <a class="btn btn-warning btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Cancel</a>
-      <a class="btn btn-success btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create New and Agree</a>
-    </div>
-  </div>
+  <%= render partial: "statements/partials/new_statement_form" %>
 </div>
