@@ -11,5 +11,5 @@ class Voter < ApplicationRecord
   # has_karma :statements, :as => :submitter, :weight => [1, 0.5]
   has_karma :statements, as: :submitter, weight: [1, 0.5]
 
-  has_many :reports
+  has_many :reports, inverse_of: 'voter'
 end

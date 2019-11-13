@@ -15,7 +15,7 @@ class Statement < ApplicationRecord
   # Relationships
   belongs_to :author, class_name: 'Voter'
   accepts_nested_attributes_for :children
-  has_many :reports, dependent: :destroy
+  has_many :reports, dependent: :destroy, inverse_of: 'statement'
   accepts_nested_attributes_for :reports
 
   # ActiveStorage
