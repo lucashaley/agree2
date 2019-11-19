@@ -45,7 +45,7 @@ body {
 }
 
 #agree_footer .footer-copyright{
-	background-color: #333;
+	/* background-color: #333; */
 	padding-top:3px;
 	padding-bottom:3px;
 	text-align: center;
@@ -53,21 +53,7 @@ body {
 
 #agree_footer .footer-copyright p{
 	margin:10px;
-	color: #ccc;
-}
-
-#agree_footer ul{
-	list-style-type: none;
-    padding-left: 0;
-    line-height: 1.7;
-
-}
-
-#agree_footer h5{
-	font-size: 18px;
-    color: #333;
-    font-weight: bold;
-    margin-top: 30px;
+	color: #333;
 }
 
 #agree_footer a{
@@ -86,8 +72,8 @@ body {
 
 #agree_footer .social-networks{
 	text-align: center;
-	padding-top: 30px;
-	padding-bottom: 38px;
+	/* padding-top: 30px;
+	padding-bottom: 38px; */
 }
 
 #agree_footer .social-networks a{
@@ -119,4 +105,36 @@ body {
 	#agree_footer {
 		text-align: center;
 	}
+}
+
+
+.social-networks{
+	text-align: center;
+	/* padding-top: 30px;
+	padding-bottom: 38px; */
+}
+
+.social-networks a{
+    font-size: 32px;
+    margin-right: 5px;
+    margin-left: 5px;
+    color: #333;
+    padding: 10px;
+    transition: 0.2s;
+}
+
+.social-networks a:hover{
+	text-decoration: none;
+}
+
+.facebook:hover{
+	color:#0077e2;
+}
+
+.google:hover{
+	color:#ef1a1a;
+}
+
+.twitter:hover{
+	color: #00aced;
 }
