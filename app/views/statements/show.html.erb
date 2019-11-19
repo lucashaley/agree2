@@ -49,7 +49,12 @@
             }
           })
         </script>
-        <a class="btn btn-primary btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create Variant</a>
+
+        <!-- <a class="btn btn-primary btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create Variant</a> -->
+
+        <%= link_to 'Create Variant', new_statement_path(parent: @statement), class:'btn btn-primary btn-lg' %>
+        <a class="btn btn-primary btn-lg">Create Variant</a>
+
         </p>
       </div>
       <div class="col-xs-6 text-right">

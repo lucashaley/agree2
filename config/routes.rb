@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       # get :image
       get :image_2to1
       get :image_square
+      get 'statements/new/:parent', to: 'statements#new'
     end
     resources :reports, only: [:create]
   end

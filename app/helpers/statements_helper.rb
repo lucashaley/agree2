@@ -4,7 +4,15 @@ module StatementsHelper
   include ActsAsTaggableOn::TagsHelper
 
   def full_statement (content)
-    return "I agree that #{content.gsub("'", %q(\\\'))}."
+    return "I agree that #{content}."
+  end
+
+  def ellipsis_statement (content)
+    if content.present?
+      return "…#{content}."
+    else
+      return '…'
+    end
   end
 
   def who_agrees (statement)

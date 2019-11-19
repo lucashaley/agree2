@@ -278,7 +278,10 @@ class StatementsController < ApplicationController
 
   # GET /statements/new
   def new
+    Rails.logger.debug "\n\n-------- new ---------\n\n"
     @statement = Statement.new
+    @parent = Statement.find_by_hashid(params[:parent]) if params[:parent].present?
+    Rails.logger.debug @parent.inspect
   end
 
   # GET /statements/1/edit
