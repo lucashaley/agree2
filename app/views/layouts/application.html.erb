@@ -71,7 +71,9 @@
               </li>
             </ul>
 
-            <%= search_form_for @q, :url => search_statements_path(@q), class: 'navbar-form navbar-right' do |f| %>
+            <%= search_form_for @q,
+                url: search_statements_path(@q), 
+                class: 'navbar-form navbar-right' do |f| %>
               <div class="form-group">
               <%= f.search_field :content_cont, class: 'form-control' %>
               </div>
