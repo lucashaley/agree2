@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153205156-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-153205156-1');
+    </script>
+
     <%= csrf_meta_tags %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -72,7 +82,7 @@
             </ul>
 
             <%= search_form_for @q,
-                url: search_statements_path(@q), 
+                url: search_statements_path(@q),
                 class: 'navbar-form navbar-right' do |f| %>
               <div class="form-group">
               <%= f.search_field :content_cont, class: 'form-control' %>
