@@ -17,7 +17,7 @@ module StatementsHelper
 
   def who_agrees (statement)
     count = statement.votes_for
-    count = statement.vote_count
+    # count = statement.vote_count
 
     if count > 2
       if current_user.present? and current_user.voted_for?(statement)
