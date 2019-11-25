@@ -73,3 +73,5 @@ yarn-debug.log*
 *.rdb
 
 erd.pdf
+
+.env

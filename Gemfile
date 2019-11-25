@@ -92,6 +92,10 @@ gem 'zaru'
 gem 'httparty'
 # https://github.com/mperham/sidekiq
 gem 'sidekiq'
+# https://github.com/plataformatec/mail_form
+gem 'mail_form'
+# https://github.com/bkeepers/dotenv
+gem 'dotenv-rails', groups: [:development, :test]
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
