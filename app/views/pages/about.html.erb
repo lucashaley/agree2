@@ -1,5 +1,40 @@
-<h1>About</h1>
-<h3>Why does this site exist?</h3>
-<p>Because I want a better world for my kids, and this is hopefully a little way towards that.</p>
-<h3>Who is behind this website?</h3>
-<p>I am.</p>
+<div class="jumbotron">
+  <div class="row">
+    <div class="col">
+      <h1>About</h1>
+    </div>
+  </div>
+
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h3 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <h3>Why does this site exist?</h3>
+            </a>
+          </h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            <p>Because I want a better world for my kids, and this is hopefully a little way towards that.</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+          <h3 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              <h3>Who is behind this website?</h3>
+            </a>
+          </h3>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            <p>I am!</p>
+            <p>I'm just a person. I can be reached using the <a href="/contact_form">contact form</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
