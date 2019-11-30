@@ -1,6 +1,6 @@
 <% content_for :head do %>
 <title><%= "We Agree That… #{@statement.content.truncate(40, separator: ' ')}" %></title>
-<meta property="og:url"                content='<%= request.original_url %>' />
+<meta property="og:url"                content="<%= request.original_url %>" />
 <meta property="og:type"               content="article" />
 <meta property="og:title"              content="<%= full_statement(@statement.content) %>" />
 <meta property="og:description"        content="And <%= @statement.votes_for %> people agree with me." />
@@ -58,21 +58,8 @@
         </p>
       </div>
       <div class="col-xs-6 text-right">
-        <div class="fb-share-button"
-          data-href="http://www.weagreethat.org/statements/<%= @statement.hashid %>"
-          data-layout="button_count">
-        </div>
-        <a id="shareBtn_facebook" data-href="<%= request.original_url %>" class="btn btn-info btn-lg" role="button"><i class="fa fa-facebook-official"></i></a>
-        <script>
-          document.getElementById('shareBtn_facebook').onclick = function() {
-            FB.ui({
-              method: 'share',
-              display: 'popup',
-              href: 'http://localhost:3000/statements/13',
-            }, function(response){});
-          }
-        </script>
-        <a class="btn btn-info btn-lg" href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-text=<%= "I agree that #{@statement.content}" %> data-url="http://localhost:3000/statements/6" data-via="WeAgreeThat" data-hashtags="agree" data-show-count="false"><i class="fa fa-twitter"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <a class="btn btn-info btn-lg" href='<%= "http://www.facebook.com/share.php?u=#{request.original_url}" %>' role="button"><i class="fa fa-facebook-official"></i></a>
+        <a class="btn btn-info btn-lg" href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-text=<%= "I agree that #{@statement.content}" %> data-url="<%= request.original_url %>" data-via="WeAgreeThat" data-hashtags="agree" data-show-count="false"><i class="fa fa-twitter"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         <a class="btn btn-warning btn-lg" role="button" data-toggle="modal" data-target="#reportModal">Report</a>
       </div>
     </div>
