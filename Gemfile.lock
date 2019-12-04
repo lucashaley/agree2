@@ -301,6 +301,8 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    scout_apm (2.6.4)
+      parser
     selenium-webdriver (3.142.6)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -394,6 +396,7 @@ DEPENDENCIES
   rubocop (~> 0.76.0)
   sass-rails (~> 5.0)
   sassc-rails (>= 2.1.0)
+  scout_apm
   selenium-webdriver
   sidekiq
   spring
