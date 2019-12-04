@@ -2,36 +2,45 @@
 <title>We Agree That… tagged with '<%= @tag %>'</title>
 <% end %>
 
-<div class="row">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-12">
-        <h2>Statements tagged with '<%= @tag %>'</h2>
-      </div>
+<div class="jumbotron">
+  <div class="row">
+    <div class="col">
+      <h1>Statements</h1>
     </div>
-    <div class="row">
-      <div class="col-sm-6 col-xs-12">
-        <div class="list-group">
-          <%= render partial: "statements/partials/list_statements", collection: @tagged_statements, as: :statement %>
+  </div>
+
+
+  <div class="row">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <h2>Statements tagged with '<%= @tag %>'</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-xs-12">
+          <div class="list-group">
+            <%= render partial: "statements/partials/list_statements", collection: @tagged_statements, as: :statement %>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-6 col-xs-12">
-        <h2>Top Statements</h2>
-        <div class="list-group">
-          <%= render partial: "statements/partials/list_statements", collection: @tagged_statements_top, as: :statement %>
+  <div class="row">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6 col-xs-12">
+          <h2>Top Statements</h2>
+          <div class="list-group">
+            <%= render partial: "statements/partials/list_statements", collection: @tagged_statements_top, as: :statement %>
+          </div>
         </div>
-      </div>
-      <div class="col-sm-6 col-xs-12">
-        <h2>Most Recent</h2>
-        <div class="list-group">
-          <%= render partial: "statements/partials/list_statements", collection: @tagged_statements_recent, as: :statement %>
+        <div class="col-sm-6 col-xs-12">
+          <h2>Most Recent</h2>
+          <div class="list-group">
+            <%= render partial: "statements/partials/list_statements", collection: @tagged_statements_recent, as: :statement %>
+          </div>
         </div>
       </div>
     </div>
