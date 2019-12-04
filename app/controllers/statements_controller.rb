@@ -215,7 +215,7 @@ class StatementsController < ApplicationController
   end
 
   def image_square
-    respond_to :png
+    # respond_to :png
     Rails.logger.debug "\n\nIMAGE_SQUARE\n\n"
     redirect_to @statement.image_square if @statement.image_square.attached?
   end
