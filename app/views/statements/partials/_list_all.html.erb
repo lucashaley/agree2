@@ -1,0 +1,26 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>Content</th>
+      <th>Votes</th>
+      <th>Parent</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @statements.each do |statement| %>
+      <tr>
+        <td><%= statement.content %></td>
+        <td><%= statement.votes_for %></td>
+        <td><%= statement.parent %></td>
+        <td><%= link_to 'Show', statement %></td>
+        <td><%= link_to 'Edit', edit_statement_path(statement) %></td>
+        <td><%= link_to 'Destroy', statement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
