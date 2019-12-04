@@ -15,6 +15,7 @@ This is also my first experiment in deploying to Heroku.
     * redis-server
     * bundle exec sidekiq
 * heroku run rake db:migrate
+* heroku addons:open scout
 
 
 ## Some things
