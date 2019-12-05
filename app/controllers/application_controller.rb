@@ -8,16 +8,16 @@ class ApplicationController < ActionController::Base
     @q = Statement.ransack(search_params[:q])
   end
 
-  helper_method :current_user
-  def current_user
+  helper_method :current_voter
+  def current_voter
     if session[:voter_id]
-      @current_user ||= Voter.find(session[:voter_id])
+      @current_voter ||= Voter.find(session[:voter_id])
     else
       Rails.logger.debug '-------------'
-      Rails.logger.debug 'DID NOT FIND A USER'
+      Rails.logger.debug 'DID NOT FIND A VOTER'
       Rails.logger.debug '-------------'
 
-      @current_user = nil
+      @current_voter = nil
     end
   end
 

@@ -23,8 +23,8 @@ class ReportsController < ApplicationController
         @report = @statement.reports.build(report_params[:report])
         @report.kind = kind
 
-        if current_user
-          @report.voter = current_user
+        if current_voter
+          @report.voter = current_voter
         else
           @report.voter = Voter.find(1)
         end

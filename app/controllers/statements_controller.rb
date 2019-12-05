@@ -16,8 +16,8 @@ class StatementsController < ApplicationController
     # get the first one
     @statement = Statement.find(1)
     @top_ten = Statement.top.limit(10)
-    if current_user
-      @agreed = current_user.voted_for?(@statement)
+    if current_voter
+      @agreed = current_voter.voted_for?(@statement)
     end
 
     @css_string = 'btn btn-success btn-lg'
@@ -50,19 +50,19 @@ class StatementsController < ApplicationController
           @diff_right = Diffy::SplitDiff.new(@parent.content, @statement.content, :format => :html).right.html_safe
         end
 
-        @voted_ancestor = @statement.voted_ancestor(current_user)
-        @voted_descendant = @statement.voted_descendant(current_user)
+        @voted_ancestor = @statement.voted_ancestor(current_voter)
+        @voted_descendant = @statement.voted_descendant(current_voter)
 
         # create a temporary child in case they want to make a variant
         @child = Statement.new
         @child.tag_list = @statement.tag_list
-        @child.author = current_user
+        @child.author = current_voter
         @child.parent = @statement
 
         # get the agreement of the current user for this statement
         @agreed = false
-        if current_user
-          @agreed = current_user.voted_for?(@statement)
+        if current_voter
+          @agreed = current_voter.voted_for?(@statement)
         end
 
         # set the agree button css.
@@ -109,7 +109,7 @@ class StatementsController < ApplicationController
   #     @voted_ancestor = @statement.ancestors.voted_for?
   #     Rails.logger.debug @voted_ancestor.inspect
   #
-  #     vote = current_user.vote_for(@statement)
+  #     vote = current_voter.vote_for(@statement)
   #     # Rails.logger.debug vote.inspect
   #
   #     @statement.update_vote_count
@@ -129,7 +129,7 @@ class StatementsController < ApplicationController
   # def disagree
   #   Rails.logger.debug "\n\n------------- disagree start -------------\n\n"
   #   begin
-  #     current_user.unvote_for(@statement)
+  #     current_voter.unvote_for(@statement)
   #     respond_to do |format|
   #       format.html { redirect_to :back }
   #       format.js {}
@@ -145,8 +145,8 @@ class StatementsController < ApplicationController
     Rails.logger.debug '-------------'
 
     begin
-      if current_user.voted_for?(@statement)
-        current_user.unvote_for(@statement)
+      if current_voter.voted_for?(@statement)
+        current_voter.unvote_for(@statement)
       else
         # find next vote up ancestor tree
         # get all ancestors
@@ -154,11 +154,11 @@ class StatementsController < ApplicationController
         Rails.logger.debug "\n\n--------- ancestors: #{@ancestors.inspect}\n\n"
         # traverse ancestors to find voted_for
         @voted_ancestor = @ancestors.find { |ancestor|
-          current_user.voted_for?(ancestor)
+          current_voter.voted_for?(ancestor)
         }
         Rails.logger.debug "\n\n--------- voted_ancestor: #{@voted_ancestor.inspect}\n\n"
 
-        vote = current_user.vote_for(@statement)
+        vote = current_voter.vote_for(@statement)
 
         # this section adds the country to the vote
         # clearly not the best way or place to do this.
@@ -196,10 +196,10 @@ class StatementsController < ApplicationController
     @ancestors = @statement.ancestors
     # traverse ancestors to find voted_for
     @voted_ancestor = @ancestors.find { |ancestor|
-      current_user.voted_for?(ancestor)
+      current_voter.voted_for?(ancestor)
     }
 
-    vote = current_user.vote_for(@statement)
+    vote = current_voter.vote_for(@statement)
 
     # this section adds the country to the vote
     # clearly not the best way or place to do this.
