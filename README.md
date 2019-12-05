@@ -33,3 +33,4 @@ This is also my first experiment in deploying to Heroku.
 * https://cards-dev.twitter.com/validator
 * https://github.com/lml/commontator
 * https://github.com/faker-ruby/faker
+* https://www.toptal.com/ruby-on-rails/top-10-mistakes-that-rails-programmers-make
