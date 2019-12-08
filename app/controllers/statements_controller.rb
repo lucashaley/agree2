@@ -112,7 +112,7 @@ class StatementsController < ApplicationController
   #     vote = current_voter.vote_for(@statement)
   #     # Rails.logger.debug vote.inspect
   #
-  #     @statement.update_vote_count
+  #     @statement.update_agree_count
   #
   #     respond_to do |format|
   #       format.html { redirect_back fallback_location: root_path }
@@ -175,7 +175,7 @@ class StatementsController < ApplicationController
         vote.update_column(:country, country_code)
       end
 
-      @statement.update_vote_count
+      @statement.update_agree_count
 
       respond_to do |format|
         format.html { redirect_to :back }
