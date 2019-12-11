@@ -50,8 +50,6 @@ class StatementsController < ApplicationController
           @diff_right = Diffy::SplitDiff.new(@parent.content, @statement.content, :format => :html).right.html_safe
         end
 
-        @voted_ancestor = @statement.voted_ancestor(current_voter)
-        @voted_descendant = @statement.voted_descendant(current_voter)
 
         # create a temporary child in case they want to make a variant
         @child = Statement.new
@@ -63,6 +61,8 @@ class StatementsController < ApplicationController
         @agreed = false
         if current_voter
           @agreed = current_voter.voted_for?(@statement)
+          @voted_ancestor = @statement.voted_ancestor(current_voter)
+          @voted_descendant = @statement.voted_descendant(current_voter)
         end
 
         # set the agree button css.
@@ -150,13 +150,26 @@ class StatementsController < ApplicationController
       else
         # find next vote up ancestor tree
         # get all ancestors
-        @ancestors = @statement.ancestors
-        Rails.logger.debug "\n\n--------- ancestors: #{@ancestors.inspect}\n\n"
+        # @ancestors = @statement.ancestors
+        # Rails.logger.debug "\n\n--------- ancestors: #{@ancestors.inspect}\n\n"
         # traverse ancestors to find voted_for
-        @voted_ancestor = @ancestors.find { |ancestor|
-          current_voter.voted_for?(ancestor)
-        }
+        # @voted_ancestor = @ancestors.find { |ancestor|
+        #   current_voter.voted_for?(ancestor)
+        # }
+        @voted_ancestor = @statement.voted_ancestor(current_voter)
         Rails.logger.debug "\n\n--------- voted_ancestor: #{@voted_ancestor.inspect}\n\n"
+        if @voted_ancestor.present?
+          Rails.logger.debug "\n\n--------- unvoting for ancestor\n\n"
+          current_voter.unvote_for(@voted_ancestor)
+          @voted_ancestor.update_agree_count
+        end
+        @voted_descendant = @statement.voted_descendant(current_voter)
+        Rails.logger.debug "\n\n--------- voted_ancestor: #{@voted_descendant.inspect}\n\n"
+        if @voted_descendant.present?
+          Rails.logger.debug "\n\n--------- unvoting for descendant\n\n"
+          current_voter.unvote_for(@voted_descendant)
+          @voted_descendant.update_agree_count
+        end
 
         vote = current_voter.vote_for(@statement)
 
@@ -199,7 +212,7 @@ class StatementsController < ApplicationController
       current_voter.voted_for?(ancestor)
     }
 
-    vote = current_voter.vote_for(@statement)
+    vote = current_voter.vote_for_statement(@statement)
 
     # this section adds the country to the vote
     # clearly not the best way or place to do this.

@@ -12,4 +12,18 @@ class Voter < ApplicationRecord
   has_karma :statements, as: :submitter, weight: [1, 0.5]
 
   has_many :reports, inverse_of: 'voter'
+
+  # def vote_for_statement (statement, ancestor, descendant)
+  #   Rails.logger.debug "\n\n---- vote_for_statement ----\n\n"
+  #
+  #   statement.ancestors.scoping do
+  #     Rails.logger.debug "Scoping count: #{statement.votes_count}\n\n"
+  #     # Rails.logger.debug "Voted for: #{Statement.tally.inspect}\n\n"
+  #   end
+  #   # go up through statements
+  #   Rails.logger.debug statement.ancestors.votes_count
+  #   # go down through statements
+  #
+  #   vote_for(statement)
+  # end
 end
