@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Statement < ApplicationRecord
-  has_closure_tree order: 'vote_count', numeric_order: true
+  has_closure_tree order: 'agree_count', numeric_order: true
   acts_as_taggable
   acts_as_voteable
 
