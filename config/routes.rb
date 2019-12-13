@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'sessions/new'
   post 'sessions/create'
   get 'sessions/destroy'
-  post '/statements/create_root' => "statements#create_root"
+  # post '/statements/create_root' => "statements#create_root"
 
   resources :voters
   resources :authors
@@ -14,21 +14,23 @@ Rails.application.routes.draw do
       get :search
     end
     member do
-      post :create_root
-      post :create_child
+      # post :create_root
+      # post :create_child
       post :agree
       post :disagree
       post :toggle_agree
       # get :image
       get :image_2to1
       get :image_square
-      get 'statements/new/:parent', to: 'statements#new'
     end
     resources :reports, only: [:create]
   end
-  resources :statements, param: :parent_id do
-    resources :statements, as: 'children', shallow: true
-  end
+
+  # I don't remember what this does
+  # resources :statements, param: :parent_id do
+  #   resources :statements, as: 'children', shallow: true
+  # end
+
   # resources :statements do
   #   resources :statements
   #   member do
@@ -41,8 +43,11 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "statements#home", page: "home"
+  get 'statements/new/:parent', to: 'statements#new'
 
   get '/contact', to: "contact_form#index"
   resources :contact_form, only: [:index, :new, :create]
 
+  # catchall. Must be last line
+  match '*path', via: :all, to: 'pages#error_404'
 end
