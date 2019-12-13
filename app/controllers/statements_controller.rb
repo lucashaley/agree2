@@ -29,16 +29,22 @@ class StatementsController < ApplicationController
   # GET /statements
   # GET /statements.json
   def index
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
     @statements = Statement.all
     # @top_ten = Statement.tally.order(:votes_for)
     @tags = Statement.tag_counts_on(:tags)
     @top_ten = Statement.top.limit(10).includes(:votes)
     @most_recent = Statement.recent.limit(10).includes(:votes)
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   # GET /statements/1
   # GET /statements/1.json
   def show
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
     # ! check for format here
     respond_to do |format|
       format.html {
@@ -89,6 +95,8 @@ class StatementsController < ApplicationController
         # redirect_to "https://assets.imgix.net/~text?fm=png&txtsize=36&w=600&txtfont=Helvetica,Bold&txt=I agree that " + @statement.content + "&txtpad=30&bg=fff&txtclr=000"
       }
     end
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   def tag
@@ -490,9 +498,11 @@ class StatementsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_statement
-    Rails.logger.debug "\n\n-------- SET_STATEMENT start --------\n\n"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
     @statement = Statement.find(params[:id])
-    Rails.logger.debug "\n\n-------- SET_STATEMENT end --------\n\n"
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   def set_parent_for_new
