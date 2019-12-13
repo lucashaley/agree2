@@ -115,6 +115,8 @@ group :development do
   gem 'brakeman'
   # https://github.com/roidrage/lograge
   gem "lograge"
+  # https://github.com/sickill/rainbow
+  gem "rainbow"
 end
 
 group :test do
