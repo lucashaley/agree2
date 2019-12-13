@@ -113,6 +113,8 @@ group :development do
   gem "rails-erd"
   # https://github.com/presidentbeef/brakeman
   gem 'brakeman'
+  # https://github.com/roidrage/lograge
+  gem "lograge"
 end
 
 group :test do

@@ -73,4 +73,7 @@ Rails.application.configure do
 
   # https://medium.com/@tbrisker/strong-parameters-in-rails-down-the-rabbit-hole-2426d331625
   # config.action_controller.action_on_unpermitted_parameters = :raise
+
+  # Use lograge
+  config.lograge.enabled = true
 end
