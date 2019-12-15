@@ -16,8 +16,10 @@ module StatementsHelper
   end
 
   def who_agrees (statement)
-    count = statement.votes_for
-    # count = statement.agree_count
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
+
+    # count = statement.votes_for
+    count = statement.agree_count
 
     if count > 2
       if current_voter.present? and current_voter.voted_for?(statement)
@@ -40,6 +42,8 @@ module StatementsHelper
     else
       return "Nobody yet agrees that…"
     end
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
   end
 
   def agree_button_css
