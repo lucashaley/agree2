@@ -26,6 +26,8 @@ class VotersController < ApplicationController
   # POST /voters
   # POST /voters.json
   def create
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
+
     @voter = Voter.new(voter_params)
 
     respond_to do |format|
@@ -37,6 +39,8 @@ class VotersController < ApplicationController
         format.json { render json: @voter.errors, status: :unprocessable_entity }
       end
     end
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
   end
 
   # PATCH/PUT /voters/1

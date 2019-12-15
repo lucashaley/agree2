@@ -9,6 +9,8 @@ class StatementsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_homepage
 
   def home
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
+
     @agreed = false
     # create a temporary child in case they want to make a variant
     @new = Statement.new
@@ -24,6 +26,8 @@ class StatementsController < ApplicationController
     if @agreed
       @css_string += ' active'
     end
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
   end
 
   # GET /statements

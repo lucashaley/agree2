@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
 
     voter = Voter.find_or_create_by!(fingerprint: params[:fingerprint])
 
@@ -21,15 +21,15 @@ class SessionsController < ApplicationController
       redirect_back fallback_location: statements_url
     end
 
-    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
   end
 
   def destroy
-    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
 
     session[:voter_id] = nil
     redirect_to root_url, notice: 'Logged out!'
 
-    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
   end
 end

@@ -5,6 +5,7 @@ class PagesController < ApplicationController
     if valid_page?
       render template: "pages/#{params[:page]}"
     else
+      Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} NOT FOUND ------\n").red.bright
       render file: 'public/404.html', status: :not_found
     end
   end

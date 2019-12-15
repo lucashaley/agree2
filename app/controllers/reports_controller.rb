@@ -2,17 +2,21 @@
 
 class ReportsController < ApplicationController
   before_action :set_statement, only: [:create]
-
-  def new
-    Rails.logger.debug "\n-------- REPORT NEW --------"
-  end
-
-  def edit
-    Rails.logger.debug "\n-------- REPORT EDIT --------"
-  end
-
+  #
+  # def new
+  #   Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
+  #
+  #   Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
+  # end
+  #
+  # def edit
+  #   Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
+  #
+  #   Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
+  # end
+  #
   def create
-    Rails.logger.debug "\n-------- REPORT CREATE --------"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
 
     respond_to do |format|
       format.html
@@ -37,23 +41,25 @@ class ReportsController < ApplicationController
           @report.errors.full_messages
         end
     end
-  end
 
-  def update
-    Rails.logger.debug "\n-------- REPORT UPDATE --------"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
   end
-
-  def destroy
-    Rails.logger.debug "\n-------- REPORT DESTROY --------"
-  end
-end
+#
+#   def update
+#     Rails.logger.debug "\n-------- REPORT UPDATE --------"
+#   end
+#
+#   def destroy
+#     Rails.logger.debug "\n-------- REPORT DESTROY --------"
+#   end
+# end
 
 private
 
 def set_statement
-  Rails.logger.debug "\n\n-------- REPORT SET_STATEMENT start --------\n\n"
+  Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
   @statement = Statement.find(report_params[:statement_id])
-  Rails.logger.debug "\n\n-------- REPORT SET_STATEMENT end --------\n\n"
+  Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
 end
 
 def report_params
