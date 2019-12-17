@@ -54,6 +54,14 @@ class StatementsController < ApplicationController
       format.html {
         @reports = @statement.reports
 
+        # this is kludgy clean up for statements whose parents have been deleted
+        Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} #{@statement.parent.present? && !@statement.root?} ------\n").blue
+        if !@statement.parent.present? && !@statement.root?
+          Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING PARENT ------\n").red
+          @statement.parent = nil
+          @statement.update_attribute(:parent_id, nil)
+        end
+
         if @parent
           @diff = Diffy::Diff.new(@parent.content, @statement.content).to_s(:html).html_safe
           @diff_left = Diffy::SplitDiff.new(@parent.content, @statement.content, :format => :html).left.html_safe
