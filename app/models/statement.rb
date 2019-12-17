@@ -40,7 +40,7 @@ class Statement < ApplicationRecord
 
 
   def clean_statement
-    Rails.logger.debug Rainbow("\n-------- CLEAN_STATEMENT Start --------\n").blue
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
 
     # remove initial capital
     # content[0] = content[0].downcase
@@ -50,23 +50,25 @@ class Statement < ApplicationRecord
     # remove last punctuation
     content.sub!(/[?.!,;]?$/, '')
 
-    Rails.logger.debug "\n-------- CLEAN_STATEMENT End --------\n"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   def save_statement
-    Rails.logger.debug "\n-------- SAVE_STATEMENT Start --------\n"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
 
     yield
 
-    Rails.logger.debug "\n-------- SAVE_STATEMENT End --------\n"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   # this can't be after save! What about associations?
   def update_agree_count
-    Rails.logger.debug "\n-------- update_agree_count start --------\n"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
     update_attribute(:agree_count, self.votes_for)
     # self.agree_count = self.plusminus
-    Rails.logger.debug "\n-------- update_agree_count end --------\n"
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   # putting 'self' beforehand turns this into a class method!
