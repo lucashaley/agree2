@@ -94,7 +94,13 @@ class StatementsController < ApplicationController
         # File.open("#{@statement.hashid}.dot", "w") { |f| f.write(Statement.root.to_dot_digraph) }
 
         File.open("source/graphs/#{@statement.hashid}.dot", "w") { |f| f.write(
-          @statement.root? ? @statement.to_dot_digraph : @statement.root.to_dot_digraph
+          if @statement.root?
+            @statement.to_dot_digraph
+          else
+            Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} #{@statement.root.inspect} ------\n").red
+            @statement.root.to_dot_digraph
+          end
+          # @statement.root? ? @statement.to_dot_digraph : @statement.root.to_dot_digraph
           ) }
 
         # test refactor
