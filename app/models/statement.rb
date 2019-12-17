@@ -91,6 +91,10 @@ class Statement < ApplicationRecord
     }
   end
 
+  def to_digraph_label
+    content
+  end
+
   def create_image(aspect)
     # an this be an instance method?
     convert = MiniMagick::Tool::Convert.new

@@ -82,6 +82,13 @@ class StatementsController < ApplicationController
           @css_string += ' active'
         end
 
+        # test graph write out
+        # File.open("#{@statement.hashid}.dot", "w") { |f| f.write(Statement.root.to_dot_digraph) }
+
+        File.open("source/graphs/#{@statement.hashid}.dot", "w") { |f| f.write(
+          @statement.root? ? @statement.to_dot_digraph : @statement.root.to_dot_digraph
+          ) }
+
         # test refactor
         # parse_statement(@statement.content)
       }
