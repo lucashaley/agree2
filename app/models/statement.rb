@@ -65,7 +65,7 @@ class Statement < ApplicationRecord
   def update_agree_count
     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
 
-    update_attribute(:agree_count, self.votes_for)
+    update_attribute(:agree_count, self.plusminus)
     # self.agree_count = self.plusminus
 
     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred

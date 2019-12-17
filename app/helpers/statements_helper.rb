@@ -20,6 +20,7 @@ module StatementsHelper
 
     # count = statement.votes_for
     count = statement.agree_count
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} count=#{count} ------\n").blue
 
     if count > 2
       if current_voter.present? and current_voter.voted_for?(statement)

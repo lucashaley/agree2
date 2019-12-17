@@ -392,11 +392,12 @@ class StatementsController < ApplicationController
       Rails.logger.debug "\n\n#{@parent.inspect}\n\n"
       # @statement = @parent.children.create(create_params)
       @statement = @parent.children.create(create_params)
-      @statement.agree_count = 0
     else
       Rails.logger.debug "\n\nCreate root\n\n"
       @statement = Statement.new(create_params)
     end
+    # for some reason
+    @statement.agree_count = 0
 
     if current_voter
       @statement.author = current_voter
@@ -407,6 +408,7 @@ class StatementsController < ApplicationController
     respond_to do |format|
       if @statement.save
         current_voter.vote_for(@statement)
+        @statement.update_agree_count
 
         # create images
         create_image(@statement)
