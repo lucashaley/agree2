@@ -40,11 +40,13 @@ class Statement < ApplicationRecord
 
 
   def clean_statement
-    Rails.logger.debug "\n-------- CLEAN_STATEMENT Start --------\n"
+    Rails.logger.debug Rainbow("\n-------- CLEAN_STATEMENT Start --------\n").blue
 
     # remove initial capital
     # content[0] = content[0].downcase
 
+    # remove initial period
+    content.sub!(/^[…]?/, '')
     # remove last punctuation
     content.sub!(/[?.!,;]?$/, '')
 
