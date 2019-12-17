@@ -5,6 +5,8 @@ class StatementCreateTwoToOneImageWorker
   def perform(hashid, content)
     logger.debug "\n\n------- StatementCreateTwoToOneImageWorker: perform start -------\n\n"
 
+    filepath = "#{Rails.root.join('tmp')}/#{hashid}_2to1.png"
+
     convert = MiniMagick::Tool::Convert.new
     convert << '-page'
     convert << '0x0'
@@ -18,10 +20,14 @@ class StatementCreateTwoToOneImageWorker
     convert << "caption:#{image_statement(content)}"
     convert << '-layers'
     convert << 'mosaic'
-    convert << "#{Rails.root.join('tmp')}/#{hashid}_2to1.png"
+    convert << filepath
     convert.call
 
-    Statement.find(hashid).image_2to1.attach(io: File.open("#{Rails.root.join('tmp')}/#{hashid}_2to1.png"), filename: "#{hashid}_2to1.png")
+    # send it to Google
+    Statement.find(hashid).image_2to1.attach(io: File.open(filepath), filename: "#{hashid}_2to1.png")
+
+    # and delete the local copy
+    File.delete(filepath) if File.exist?(filepath)
 
     logger.debug "\n\n------- StatementCreateTwoToOneImageWorker: perform start -------\n\n"
   end
