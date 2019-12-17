@@ -72,6 +72,9 @@ yarn-debug.log*
 # redis dump
 *.rdb
 
+# source files
+/source/*
+
 erd.pdf
 
 .env
