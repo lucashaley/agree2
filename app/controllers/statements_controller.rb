@@ -286,7 +286,7 @@ class StatementsController < ApplicationController
       redirect_to @statement.image_2to1
     else
       Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE NOT ATTACHED ------\n").red
-      redirect_back
+      redirect_to @statement
     end
 
     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
