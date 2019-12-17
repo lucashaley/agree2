@@ -2,6 +2,7 @@
 
 class StatementsController < ApplicationController
   require "mini_magick"
+  require 'rainbow'
 
   before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree, :image_square, :image_2to1]
   before_action :set_parent, only: [:show, :update]
