@@ -49,5 +49,6 @@ Rails.application.routes.draw do
   resources :contact_form, only: [:index, :new, :create]
 
   # catchall. Must be last line
-  match '*path', via: :all, to: 'pages#error_404'
+  # for some reason this messes up the image view
+  # match '*path', via: :all, to: 'pages#error_404'
 end
