@@ -54,14 +54,15 @@ class ReportsController < ApplicationController
 #   end
 # end
 
-private
+  private
 
-def set_statement
-  Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
-  @statement = Statement.find(report_params[:statement_id])
-  Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
-end
+  def set_statement
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green.bright
+    @statement = Statement.find(report_params[:statement_id])
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred.bright
+  end
 
-def report_params
-  params.permit(:report, :kind, :statement_id)
+  def report_params
+    params.permit(:report, :kind, :statement_id)
+  end
 end
