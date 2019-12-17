@@ -59,6 +59,8 @@
         </p>
       </div>
       <div class="col-xs-6 text-right">
+        <%= link_to 'Square', image_square_statement_path(:format => :png) %>
+        <%= link_to '2:1', image_2to1_statement_path(:format => :png) %>
         <a class="btn btn-info btn-lg" href='<%= "http://www.facebook.com/share.php?u=#{request.original_url}" %>' role="button"><i class="fa fa-facebook-official"></i></a>
         <a class="btn btn-info btn-lg" href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-text=<%= "I agree that #{@statement.content}" %> data-url="<%= request.original_url %>" data-via="WeAgreeThat" data-hashtags="agree" data-show-count="false"><i class="fa fa-twitter"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         <a class="btn btn-warning btn-lg" role="button" data-toggle="modal" data-target="#reportModal">Report</a>
