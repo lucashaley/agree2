@@ -56,7 +56,7 @@ class StatementsController < ApplicationController
         @reports = @statement.reports
 
         # this is kludgy clean up for statements whose parents have been deleted
-        
+
         if !@statement.parent.present? && !@statement.root?
           Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING PARENT ------\n").red
           @statement.parent = nil
@@ -368,6 +368,8 @@ class StatementsController < ApplicationController
 
 
   def create
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
     # clean the statement
     # this is duplicated, and should be cleaned up
     content = create_params[:content]
@@ -420,6 +422,7 @@ class StatementsController < ApplicationController
       end
     end
 
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   # # POST /statements
