@@ -71,27 +71,31 @@
   <%= render partial: "statements/partials/previously_agreed", locals: {voted: @voted_ancestor} if @voted_ancestor.present? %>
   <%= render partial: "statements/partials/previously_agreed", locals: {voted: @voted_descendant} if @voted_descendant.present? %>
   </div>
+
+<!--
   <div class="collapse" id="new_child">
     <div class="well text-center">
       <h3>Modify the text to improve it!</h3>
       <%# form_with(model: @child) do |f| %>
-      <%= form_for(@child, url: create_child_statement_path) do |f| %>
+      <%# form_for(@child, url: create_child_statement_path) do |f| %>
       <div class="field">
-        <%= f.text_area :content, :value => @statement.content, :cols => 40, :rows => 2 %>
+        <%# f.text_area :content, :value => @statement.content, :cols => 40, :rows => 2 %>
       </div>
       <div class="field">
-        <%= f.label :tag_list %>
-        <%= f.text_field :tag_list, value: f.object.tag_list.to_s, size: 80 %>
+        <%# f.label :tag_list %>
+        <%# f.text_field :tag_list, value: f.object.tag_list.to_s, size: 80 %>
       </div>
-      <%= f.hidden_field :parent_id, :value => @statement.id %>
+      <%# f.hidden_field :parent_id, :value => @statement.id %>
       <a class="btn btn-warning btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Cancel</a>
-      <%= f.submit "Submit variant and agree", class: "btn btn-success btn-lg" %>
-      <% end %>
+      <%# f.submit "Submit variant and agree", class: "btn btn-success btn-lg" %>
+      <%# end %>
       <div>
         <h4>If you'd like to create an entirely new statement, click here.</h4>
       </div>
     </div>
   </div>
+-->
+
 </div>
 
 
