@@ -21,7 +21,7 @@ class StatementCreateGraphImageWorker
     GraphViz.parse( graph_filepath, :path => "/usr/local/bin" ).output(:png => image_filepath)
 
     # send dot file to Google and delete
-    Statement.find(hashid).graph.attach(io: File.open(graph_filepath, filename: "#{hashid}_graph.dot")
+    Statement.find(hashid).graph.attach(io: File.open(graph_filepath), filename: "#{hashid}_graph.dot")
     File.delete(graph_filepath) if File.exist?(graph_filepath)
 
     # send image to Google and delete
