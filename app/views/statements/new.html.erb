@@ -3,11 +3,13 @@
 <% end %>
 
 <div class="jumbotron">
-  <%= render partial: "statements/partials/parent_statement", locals: {parent: @parent} if @parent.present? %>
+  <%= render partial: "statements/partials/parent_statement",
+      locals: {parent_content: @parent.content} if @parent.present? %>
   <div class="row">
     <h3>
       <% if @parent.present? %>Instead, you propose that…<% else %>You propose that…<% end %>
     </h3>
   </div>
-  <%= render partial: "statements/partials/new_statement_form", locals: {parent: @parent} %>
+  <%= render partial: "statements/partials/new_statement_form",
+      locals: {statement: @statement, parent: @parent, author_id: @author_id} %>
 </div>
