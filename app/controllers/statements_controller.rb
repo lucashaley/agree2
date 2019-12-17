@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class StatementsController < ApplicationController
-  require "mini_magick"
+  require 'mini_magick'
   require 'rainbow'
+  require 'ruby-graphviz'
 
-  before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree, :image_square, :image_2to1]
+  before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree, :image_square, :image_2to1, :graph, :image_graph]
   before_action :set_parent, only: [:show, :update]
   before_action :set_parent_for_new, only: [:create_child]
   # before_action :create_params, only: [:create]
@@ -95,15 +96,15 @@ class StatementsController < ApplicationController
         # test graph write out
         # File.open("#{@statement.hashid}.dot", "w") { |f| f.write(Statement.root.to_dot_digraph) }
 
-        File.open("source/graphs/#{@statement.hashid}.dot", "w") { |f| f.write(
-          if @statement.root?
-            @statement.to_dot_digraph
-          else
-            Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} #{@statement.root.inspect} ------\n").red
-            @statement.root.to_dot_digraph
-          end
-          # @statement.root? ? @statement.to_dot_digraph : @statement.root.to_dot_digraph
-          ) }
+        # File.open("source/graphs/#{@statement.hashid}.dot", "w") { |f| f.write(
+        #   if @statement.root?
+        #     @statement.to_dot_digraph
+        #   else
+        #     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} #{@statement.root.inspect} ------\n").red
+        #     @statement.root.to_dot_digraph
+        #   end
+        #   # @statement.root? ? @statement.to_dot_digraph : @statement.root.to_dot_digraph
+        #   ) }
 
         # test refactor
         # parse_statement(@statement.content)
@@ -293,6 +294,39 @@ class StatementsController < ApplicationController
 
     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
+
+  def graph
+    # respond_to :png
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
+    # redirect_to @statement.image_square if @statement.image_square.attached?
+    if @statement.graph.attached?
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE ATTACHED ------\n").green
+      redirect_to @statement.graph
+    else
+      Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE NOT ATTACHED ------\n").red
+      redirect_to @statement
+    end
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
+  end
+
+  def image_graph
+    # respond_to :png
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
+    # redirect_to @statement.image_square if @statement.image_square.attached?
+    if @statement.image_graph.attached?
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE ATTACHED ------\n").green
+      redirect_to @statement.image_graph
+    else
+      Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE NOT ATTACHED ------\n").red
+      redirect_to @statement
+    end
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
+  end
+
   #
   # def create_child
   #   Rails.logger.debug '-------------'

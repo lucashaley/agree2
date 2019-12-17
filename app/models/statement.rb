@@ -23,6 +23,8 @@ class Statement < ApplicationRecord
   has_one_attached :statement_image
   has_one_attached :image_2to1
   has_one_attached :image_square
+  has_one_attached :graph
+  has_one_attached :image_graph
 
   # Callbacks
   before_create :clean_statement

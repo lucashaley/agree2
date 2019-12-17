@@ -96,6 +96,8 @@ gem 'sidekiq'
 gem 'mail_form'
 # https://github.com/bkeepers/dotenv
 gem 'dotenv-rails', groups: [:development, :test]
+# https://github.com/glejeune/Ruby-Graphviz
+gem 'ruby-graphviz'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
