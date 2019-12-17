@@ -256,64 +256,34 @@ class StatementsController < ApplicationController
 
   def image_square
     # respond_to :png
-    Rails.logger.debug "\n\nIMAGE_SQUARE\n\n"
-    redirect_to @statement.image_square if @statement.image_square.attached?
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
+    # redirect_to @statement.image_square if @statement.image_square.attached?
+    if @statement.image_square.attached?
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE ATTACHED ------\n").green
+      redirect_to @statement.image_square
+    else
+      Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE NOT ATTACHED ------\n").red
+      redirect_to @statement
+    end
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   def image_2to1
-    Rails.logger.debug "\n\nIMAGE_2to1\n\n"
-    redirect_to @statement.image_2to1 if @statement.image_2to1.attached?
-  end
+    # respond_to :png
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
 
-  def create_child
-    Rails.logger.debug '-------------'
-    Rails.logger.debug 'CREATE_CHILD'
-    Rails.logger.debug '-------------'
-
-    # find the parent statement
-    @parent = Statement.find(parent_params[:parent_id])
-
-    # add the current user to the new statement
-    merged_params = statement_params.merge!(author: current_user)
-
-    # create the new statement
-    @statement = Statement.new(merged_params)
-
-    Rails.logger.debug '-------------'
-    Rails.logger.debug "CHILD: #{@statement.inspect}" # + @statement.inspect
-    Rails.logger.debug '-------------'
-
-    Rails.logger.debug "\n\nCheck if unique\n\n"
-    redirect_to Statement.find_by_content(@statement.content) and return if not @statement.valid?
-
-    respond_to do |format|
-      if @statement.save
-        Rails.logger.debug '-------------'
-        Rails.logger.debug 'CREATE_CHILD: SAVE'
-        Rails.logger.debug '-------------'
-        @parent.add_child @statement
-        current_user.vote_for(@statement)
-        # create the image
-        # ? is this the best place for this?
-        create_image(@statement)
-        # parse statement
-        parse_statement(@statement.content)
-
-        format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
-        format.json { render :show, status: :created, location: @statement }
-      else
-        Rails.logger.debug '-------------'
-        Rails.logger.debug 'CREATE_CHILD: NO SAVE'
-        Rails.logger.debug '-------------'
-        # Rails.logger.debug '-------------'
-        # Rails.logger.debug @statement.inspect
-        # Rails.logger.debug '-------------'
-        format.html { render :home }
-        format.json { render json: @statement.errors, status: :unprocessable_entity }
-      end
+    # redirect_to @statement.image_square if @statement.image_square.attached?
+    if @statement.image_square.attached?
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE ATTACHED ------\n").green
+      redirect_to @statement.image_2to1
+    else
+      Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE NOT ATTACHED ------\n").red
+      redirect_back
     end
-  rescue ActiveRecord::RecordInvalid => e
-    print e
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   # GET /statements/new
