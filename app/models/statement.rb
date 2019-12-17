@@ -27,11 +27,11 @@ class Statement < ApplicationRecord
   # Callbacks
   before_create :clean_statement
   # around_save :save_statement
-  # after_save :update_vote_count
+  # after_save :update_agree_count
 
   # Scopes
   scope :recent, -> { order(:created_at).reverse_order }
-  scope :top, -> { order(:vote_count).reverse_order }
+  scope :top, -> { order(:agree_count).reverse_order }
 
   ASPECTS = {
     "square"  => "880x880",
@@ -60,11 +60,11 @@ class Statement < ApplicationRecord
   end
 
   # this can't be after save! What about associations?
-  def update_vote_count
-    Rails.logger.debug "\n-------- update_vote_count start --------\n"
-    update_attribute(:vote_count, self.votes_for)
-    # self.vote_count = self.plusminus
-    Rails.logger.debug "\n-------- update_vote_count end --------\n"
+  def update_agree_count
+    Rails.logger.debug "\n-------- update_agree_count start --------\n"
+    update_attribute(:agree_count, self.votes_for)
+    # self.agree_count = self.plusminus
+    Rails.logger.debug "\n-------- update_agree_count end --------\n"
   end
 
   # putting 'self' beforehand turns this into a class method!
