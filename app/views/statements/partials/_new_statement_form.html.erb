@@ -1,24 +1,43 @@
+<%= form_for(statement) do |f| %>
 <div class="row" id="new_statement-row">
   <div class="well text-center">
-    <form id="new_statement-form">
-      <textarea rows="3" style="outline: none; font-family:Helvetica;
-  font-weight:bold; font-size:42px; width:100%; -webkit-box-sizing: border-box; border: 0px solid #fff; background-color:rgb(245,245,245);">…<%= parent.content if parent.present? %></textarea>
-    </form>
+    <%= f.text_area :content,
+              value: "#{@content}",
+              cols: 40,
+              rows: 3,
+              style: "outline: none;
+                      font-family:Helvetica;
+                      font-weight:bold;
+                      font-size:42px;
+                      width:100%;
+                      -webkit-box-sizing: border-box;
+                      border: 0px solid #fff;
+                      background-color:rgb(245,245,245);" %>
   </div>
 </div>
 <div class="row" id="tags-row">
   <div class="well text-left">
     <h5>Tags (comma-separated)</h5>
-    <input id="tags_input" type="text" value="<%= @parent.tag_list.join(', ') if @parent.present? %>" style="outline: none;
-                                          font-family:Helvetica;
-                                          font-weight:bold;
-                                          font-size:24px;
-                                          width:100%">
+    <%= f.text_field :tag_list,
+              value: "#{parent.tag_list.join(', ') if parent.present?}",
+              style:  "outline: none;
+                      font-family: Helvetica;
+                      font-weight: bold;
+                      font-size: 24px;
+                      width: 100%;" %>
   </div>
+  <%= f.hidden_field :parent_id, :value => @parent.hashid if @parent.present? %>
+  <%= f.hidden_field :author_id, :value => @author_id if @author_id.present? %>
 </div>
 <div class="row" id="buttons-row">
   <div class="col text-right">
-    <a class="btn btn-warning btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Cancel</a>
-    <a class="btn btn-success btn-lg" role="button" data-toggle="collapse" href="#new_child" aria-expanded="false" aria-controls="new_child">Create New and Agree</a>
+    <a class="btn btn-warning btn-lg"
+        role="button"
+        data-toggle="collapse"
+        href="#new_child"
+        aria-expanded="false"
+        aria-controls="new_child">Cancel</a>
+    <%= f.submit "Submit variant and agree", class: "btn btn-success btn-lg" %>
   </div>
 </div>
+<% end %>

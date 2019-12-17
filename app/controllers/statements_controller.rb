@@ -4,8 +4,9 @@ class StatementsController < ApplicationController
   require "mini_magick"
 
   before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree, :image_square, :image_2to1]
-  before_action :set_parent, only: [:show, :update, :create]
+  before_action :set_parent, only: [:show, :update]
   before_action :set_parent_for_new, only: [:create_child]
+  # before_action :create_params, only: [:create]
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_homepage
 
   def home
@@ -291,47 +292,119 @@ class StatementsController < ApplicationController
 
     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
+  #
+  # def create_child
+  #   Rails.logger.debug '-------------'
+  #   Rails.logger.debug 'CREATE_CHILD'
+  #   Rails.logger.debug '-------------'
+  #
+  #   # find the parent statement
+  #   @parent = Statement.find(parent_params[:parent_id])
+  #
+  #   # add the current user to the new statement
+  #   merged_params = statement_params.merge!(author: current_voter)
+  #
+  #   # create the new statement
+  #   @statement = Statement.new(merged_params)
+  #
+  #   Rails.logger.debug '-------------'
+  #   Rails.logger.debug "CHILD: #{@statement.inspect}" # + @statement.inspect
+  #   Rails.logger.debug '-------------'
+  #
+  #   Rails.logger.debug "\n\nCheck if unique\n\n"
+  #   # redirect_to Statement.find_by_content(@statement.content) and return if not @statement.valid?
+  #   if not @statement.valid?
+  #     existing_statement = Statement.find_by_content(@statement.content)
+  #     current_voter.unvote_for(@statement)
+  #     current_voter.vote_for(existing_statement)
+  #     redirect_to existing_statement and return
+  #   end
+  #
+  #   respond_to do |format|
+  #     if @statement.save
+  #       Rails.logger.debug '-------------'
+  #       Rails.logger.debug 'CREATE_CHILD: SAVE'
+  #       Rails.logger.debug '-------------'
+  #       @parent.add_child @statement
+  #       current_voter.vote_for(@statement)
+  #       # create the image
+  #       # ? is this the best place for this?
+  #       create_image(@statement)
+  #       # parse statement
+  #       parse_statement(@statement.content)
+  #
+  #       format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
+  #       format.json { render :show, status: :created, location: @statement }
+  #     else
+  #       Rails.logger.debug '-------------'
+  #       Rails.logger.debug 'CREATE_CHILD: NO SAVE'
+  #       Rails.logger.debug '-------------'
+  #       # Rails.logger.debug '-------------'
+  #       # Rails.logger.debug @statement.inspect
+  #       # Rails.logger.debug '-------------'
+  #       format.html { render :home }
+  #       format.json { render json: @statement.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # rescue ActiveRecord::RecordInvalid => e
+  #   print e
+  # end
 
   # GET /statements/new
   def new
     Rails.logger.debug "\n\n-------- new ---------\n\n"
     @statement = Statement.new
-    @parent = Statement.find_by_hashid(params[:parent]) if params[:parent].present?
-    Rails.logger.debug @parent.inspect
+    @content = "…"
+    if params[:parent].present?
+      @parent = Statement.find_by_hashid(params[:parent])
+      @content += "#{@parent.content}."
+    end
+    @author_id = current_voter.id
   end
 
   # GET /statements/1/edit
   def edit
   end
 
-  # POST /statements
-  # POST /statements.json
+
   def create
-    # Rails.logger.debug '-------------'
-    # Rails.logger.debug params.inspect
-    # Rails.logger.debug '-------------'
-    if (params[:statement_parent_id])
-      # we are making a new version
-      Rails.logger.debug 'CREATE CHILD'
+    # clean the statement
+    # this is duplicated, and should be cleaned up
+    content = create_params[:content]
+    # remove initial period
+    content.sub!(/^[…?.!,;]?/, '')
+    # remove last punctuation
+    content.sub!(/[?.!,;]?$/, '')
 
-      # in callbacks now
-      # @parent = Statement.find(params[:statement_parent_id])
+    # check if already existing
+    @existing_statement = Statement.find_by_content(content)
+    if @existing_statement
+      current_voter.vote_for(@existing_statement) if current_voter && !current_voter.voted_for?(@existing_statement)
+      @existing_statement.update_agree_count
+      redirect_to @existing_statement and return
+    end
 
-      Rails.logger.debug "PARENT: " + @parent.inspect
-      @statement = @parent.children.create(statement_params)
-      Rails.logger.debug @statement.inspect
-      current_user.vote_exclusively_for(@statement)
+    if create_params[:parent_id]
+      Rails.logger.debug "\n\nCreate child\n\n"
+      @parent = Statement.find_by_hashid(create_params[:parent_id])
+      Rails.logger.debug "\n\n#{@parent.inspect}\n\n"
+      # @statement = @parent.children.create(create_params)
+      @statement = @parent.children.create(create_params)
+      @statement.agree_count = 0
     else
-      # we are making a brand new content
-      Rails.logger.debug "CREATE ROOT"
-      @statement = Statement.new(statement_params)
+      Rails.logger.debug "\n\nCreate root\n\n"
+      @statement = Statement.new(create_params)
     end
-    if current_user
-      @statement.author_id = current_user
+
+    if current_voter
+      @statement.author = current_voter
     end
+
+    Rails.logger.debug "\n\n#{@statement.inspect}\n\n"
 
     respond_to do |format|
       if @statement.save
+        current_voter.vote_for(@statement)
 
         # create images
         create_image(@statement)
@@ -341,51 +414,96 @@ class StatementsController < ApplicationController
         format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
         format.json { render :show, status: :created, location: @statement }
       else
-        Rails.logger.debug @statement.inspect
+        Rails.logger.debug "Something went wrong with saving new statement: #{@statement.inspect}"
         format.html { render :home }
         format.json { render json: @statement.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
-  def create_root
-    Rails.logger.debug "\n-------- CREATE ROOT START --------"
-    Rails.logger.debug "\nparams: " + root_params.inspect
-    # create the basic statement
-    @new_root = Statement.new(root_params)
-    # add user author
-    if current_user
-      # Rails.logger.debug "\ncurrent_user: " + current_user.inspect
-      @new_root.author = current_user
-    else
-      @new_root.author_id = 1
-    end
-    # Rails.logger.debug "\nnew_root: " + @new_root.inspect
-
-    Rails.logger.debug "\n\nCheck if unique\n\n"
-    redirect_to Statement.find_by_content(@new_root.content) and return if not @new_root.valid?
-
-
-    respond_to do |format|
-      # save it to database
-      if @new_root.save
-        current_user.vote_for(@new_root)
-
-        # create images
-        create_image(@new_root)
-        # parse statement
-        parse_statement(@new_root.content)
-
-        format.html { redirect_to @new_root, notice: 'Statement was successfully created. Share with your friends.' }
-        format.json { render :show, status: :ok, location: @author }
-        Rails.logger.debug "\n-------- CREATE ROOT SUCCESS --------"
-      else
-        Rails.logger.debug "\n-------- CREATE ROOT ERROR --------"
-        # Rails.logger.debug @new_root.inspect
-      end
-    end
-    Rails.logger.debug "\n-------- CREATE ROOT END --------"
-  end
+  # # POST /statements
+  # # POST /statements.json
+  # def create_old
+  #   # Rails.logger.debug '-------------'
+  #   # Rails.logger.debug params.inspect
+  #   # Rails.logger.debug '-------------'
+  #   if (params[:statement_parent_id])
+  #     # we are making a new version
+  #     Rails.logger.debug 'CREATE CHILD'
+  #
+  #     # in callbacks now
+  #     # @parent = Statement.find(params[:statement_parent_id])
+  #
+  #     Rails.logger.debug "PARENT: " + @parent.inspect
+  #     @statement = @parent.children.create(statement_params)
+  #     Rails.logger.debug @statement.inspect
+  #     current_voter.vote_exclusively_for(@statement)
+  #   else
+  #     # we are making a brand new content
+  #     Rails.logger.debug "CREATE ROOT"
+  #     @statement = Statement.new(statement_params)
+  #   end
+  #   if current_voter
+  #     @statement.author_id = current_voter
+  #   end
+  #
+  #   respond_to do |format|
+  #     if @statement.save
+  #
+  #       # create images
+  #       create_image(@statement)
+  #       # parse statement
+  #       parse_statement(@statement.content)
+  #
+  #       format.html { redirect_to @statement, notice: 'Statement was successfully created.' }
+  #       format.json { render :show, status: :created, location: @statement }
+  #     else
+  #       Rails.logger.debug @statement.inspect
+  #       format.html { render :home }
+  #       format.json { render json: @statement.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+  #
+  # def create_root
+  #   Rails.logger.debug "\n-------- CREATE ROOT START --------"
+  #   Rails.logger.debug "\nparams: " + root_params.inspect
+  #   # create the basic statement
+  #   @new_root = Statement.new(root_params)
+  #   # add user author
+  #   if current_voter
+  #     # Rails.logger.debug "\ncurrent_voter: " + current_voter.inspect
+  #     @new_root.author = current_voter
+  #   else
+  #     @new_root.author_id = 1
+  #   end
+  #   # Rails.logger.debug "\nnew_root: " + @new_root.inspect
+  #
+  #   Rails.logger.debug "\n\nCheck if unique\n\n"
+  #   redirect_to Statement.find_by_content(@new_root.content) and return if not @new_root.valid?
+  #
+  #
+  #   respond_to do |format|
+  #     # save it to database
+  #     if @new_root.save
+  #       current_voter.vote_for(@new_root)
+  #
+  #       # create images
+  #       create_image(@new_root)
+  #       # parse statement
+  #       parse_statement(@new_root.content)
+  #
+  #       format.html { redirect_to @new_root, notice: 'Statement was successfully created. Share with your friends.' }
+  #       format.json { render :show, status: :ok, location: @author }
+  #       Rails.logger.debug "\n-------- CREATE ROOT SUCCESS --------"
+  #     else
+  #       Rails.logger.debug "\n-------- CREATE ROOT ERROR --------"
+  #       # Rails.logger.debug @new_root.inspect
+  #     end
+  #   end
+  #   Rails.logger.debug "\n-------- CREATE ROOT END --------"
+  # end
 
   # PATCH/PUT /statements/1
   # PATCH/PUT /statements/1.json
@@ -437,6 +555,7 @@ class StatementsController < ApplicationController
     # StatementCreateImage.perform_async(statement.hashid, statement.content)
     StatementCreateSquareImageWorker.perform_async(statement.hashid, statement.content)
     StatementCreateTwoToOneImageWorker.perform_async(statement.hashid, statement.content)
+    StatementCreateGraphImageWorker.perform_async(statement.hashid)
 
     Rails.logger.debug "\n-------- create_image END --------\n"
   end
@@ -509,13 +628,13 @@ class StatementsController < ApplicationController
   end
 
   def set_parent
-    Rails.logger.debug "\n\n-------- SET_PARENT start --------\n\n"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").slategray
 
     if params[:parent_id]
-      Rails.logger.debug "\n\n-------- SET_PARENT parent_id --------\n\n"
+      # Rails.logger.debug "\n\n-------- SET_PARENT parent_id --------\n\n"
       @parent = Statement.find(params[:parent_id])
     elsif params[:id]
-      Rails.logger.debug "\n\n-------- SET_PARENT id --------\n\n"
+      # Rails.logger.debug "\n\n-------- SET_PARENT id --------\n\n"
 
       # this is an extra db call
       # @parent = Statement.find(params[:id]).parent
@@ -523,10 +642,10 @@ class StatementsController < ApplicationController
     # we need to include an else for a brand new one from index
     else
       # for show.html.erb
-      Rails.logger.debug "\n\n-------- SET_PARENT none --------\n\n"
+      # Rails.logger.debug "\n\n-------- SET_PARENT none --------\n\n"
       @parent = @statement.parent
     end
-    Rails.logger.debug "\n\n-------- SET_PARENT end --------\n\n"
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").slategray
   end
 
   # def top_ten
@@ -534,27 +653,31 @@ class StatementsController < ApplicationController
   # end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def statement_params_new
-    params.permit(:id)
-  end
-
-  def statement_params
-    params.require(:statement).permit(:content, :author_id, :parent_id, :tag_list, reports: [ ])
-  end
-
-  def parent_params
-    params.require(:statement).permit(:parent_id, :id)
-  end
-
-  def root_params
-    params.require(:statement).permit(:content, :tag_list)
-  end
-
+  # def statement_params_new
+  #   params.permit(:id)
+  # end
+  #
+  # def statement_params
+  #   params.require(:statement).permit(:content, :author_id, :parent_id, :tag_list, reports: [ ])
+  # end
+  #
+  # def parent_params
+  #   params.require(:statement).permit(:parent_id, :id)
+  # end
+  #
+  # def root_params
+  #   params.require(:statement).permit(:content, :tag_list)
+  # end
+  #
   def search_params
     params.permit(:utf8, :commit, q: [:content_cont]).to_h
   end
 
   def tag_params
     params.permit(:tag)
+  end
+
+  def create_params
+    params.require(:statement).permit(:content, :tag_list, :parent_id, :author_id)
   end
 end
