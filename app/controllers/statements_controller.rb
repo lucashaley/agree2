@@ -55,7 +55,7 @@ class StatementsController < ApplicationController
         @reports = @statement.reports
 
         # this is kludgy clean up for statements whose parents have been deleted
-        Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} #{@statement.parent.present? && !@statement.root?} ------\n").blue
+        
         if !@statement.parent.present? && !@statement.root?
           Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING PARENT ------\n").red
           @statement.parent = nil
