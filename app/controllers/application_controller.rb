@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     if session[:voter_id]
       @current_voter ||= Voter.find(session[:voter_id])
     else
-      Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} DID NOT FIND A VOTER ------\n").red.brght
+      Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} DID NOT FIND A VOTER ------\n").red.bright
 
       @current_voter = nil
     end
