@@ -4,7 +4,7 @@
 <meta property="og:type"               content="article" />
 <meta property="og:title"              content="<%= full_statement(@statement.content) %>" />
 <meta property="og:description"        content="And <%= @statement.votes_for %> people agree with me." />
-<meta property="og:image"              content='<%= polymorphic_url(@statement.image_2to1) if @statement.image_2to1.attached? %>' />
+<meta property="og:image"              content='<%= polymorphic_url(@statement.image_facewbook) if @statement.image_facebook.attached? %>' />
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:site" content="@WeAgreeThat" />
 <meta property="twitter:creator" content="@WeAgreeThat" />
@@ -62,6 +62,7 @@
         <%= link_to 'Graph', graph_statement_path(:format => :dot) if @statement.graph.attached? %>
         <%= link_to 'Square', image_square_statement_path(:format => :png) if @statement.image_square.attached? %>
         <%= link_to '2:1', image_2to1_statement_path(:format => :png) if @statement.image_2to1.attached? %>
+        <%= link_to 'Facebook', image_facebook_statement_path(:format => :png) if @statement.image_facebook.attached? %>
         <a class="btn btn-info btn-lg" href='<%= "http://www.facebook.com/share.php?u=#{request.original_url}" %>' role="button"><i class="fa fa-facebook-official"></i></a>
         <a class="btn btn-info btn-lg" href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-text=<%= "I agree that #{@statement.content}" %> data-url="<%= request.original_url %>" data-via="WeAgreeThat" data-hashtags="agree" data-show-count="false"><i class="fa fa-twitter"></i></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         <a class="btn btn-warning btn-lg" role="button" data-toggle="modal" data-target="#reportModal">Report</a>

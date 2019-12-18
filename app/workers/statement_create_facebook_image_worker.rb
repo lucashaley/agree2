@@ -12,9 +12,9 @@ class StatementCreateFacebookImageWorker
     convert << '0x0'
     convert << 'app/assets/images/weagreethat_facebook.png'
     convert << '-page'
-    convert << '+18+15'
+    convert << '+12+10'
     convert << '-size'
-    convert << '1200x630'
+    convert << '880x440'
     convert << '-font'
     convert << "#{font}"
     convert << "caption:#{image_statement(content)}"

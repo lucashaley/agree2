@@ -5,7 +5,7 @@ class StatementsController < ApplicationController
   require 'rainbow'
   require 'ruby-graphviz'
 
-  before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree, :image_square, :image_2to1, :graph, :image_graph]
+  before_action :set_statement, only: [:show, :edit, :update, :destroy, :agree, :disagree, :toggle_agree, :image_square, :image_2to1, :image_facebook, :graph, :image_graph]
   before_action :set_parent, only: [:show, :update]
   before_action :set_parent_for_new, only: [:create_child]
   # before_action :create_params, only: [:create]
