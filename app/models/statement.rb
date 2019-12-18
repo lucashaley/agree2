@@ -122,4 +122,41 @@ class Statement < ApplicationRecord
     Statement.find(hashid).image_2to1.attach(io: File.open("#{Rails.root.join('tmp')}/#{hashid}_#{aspect}.png"), filename: "#{hashid}_#{aspect}.png")
     # turn this into send method?
   end
+
+  # private
+
+  def build_images
+    if !image_2to1.attached?
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING 2to1 ------\n").red
+      StatementCreateTwoToOneImageWorker.perform_async(hashid, content)
+    end
+    if !image_square.attached?
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING SQUARE ------\n").red
+      StatementCreateSquareImageWorker.perform_async(hashid, content)
+    end
+
+  end
+
+  def self.rebuild_images!
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+    Statement.find_each do |statement|
+      if !statement.image_2to1.attached?
+        Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING 2to1 ------\n").red
+        StatementCreateTwoToOneImageWorker.perform_async(statement.hashid, statement.content)
+      end
+      if !statement.image_square.attached?
+        Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING SQUARE ------\n").red
+        StatementCreateSquareImageWorker.perform_async(statement.hashid, statement.content)
+      end
+    end
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
+  end
+
+  def self.rebuild_agrees!
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+    Statement.find_each do |statement|
+      statement.update_agree_count
+    end
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
+  end
 end
