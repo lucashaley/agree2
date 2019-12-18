@@ -295,6 +295,22 @@ class StatementsController < ApplicationController
     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
+  def image_facebook
+    # respond_to :png
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
+
+    # redirect_to @statement.image_square if @statement.image_square.attached?
+    if @statement.image_facebook.attached?
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE ATTACHED ------\n").green
+      redirect_to @statement.image_facebook
+    else
+      Rails.logger.error Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE_FACEBOOK NOT ATTACHED ------\n").red
+      redirect_to @statement
+    end
+
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
+  end
+
   def graph
     # respond_to :png
       Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
@@ -595,6 +611,7 @@ class StatementsController < ApplicationController
     # StatementCreateImage.perform_async(statement.hashid, statement.content)
     StatementCreateSquareImageWorker.perform_async(statement.hashid, statement.content)
     StatementCreateTwoToOneImageWorker.perform_async(statement.hashid, statement.content)
+    StatementCreateFacebookImageWorker.perform_async(statement.hashid, statement.content)
     StatementCreateGraphImageWorker.perform_async(statement.hashid)
 
     Rails.logger.debug "\n-------- create_image END --------\n"

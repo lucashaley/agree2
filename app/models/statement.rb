@@ -23,6 +23,7 @@ class Statement < ApplicationRecord
   has_one_attached :statement_image
   has_one_attached :image_2to1
   has_one_attached :image_square
+  has_one_attached :image_facebook
   has_one_attached :graph
   has_one_attached :image_graph
 
@@ -37,7 +38,8 @@ class Statement < ApplicationRecord
 
   ASPECTS = {
     "square"  => "880x880",
-    "2to1" => "88x440"
+    "2to1" => "880x440",
+    "facebook" => "1200x630",
   }
 
 
@@ -126,6 +128,7 @@ class Statement < ApplicationRecord
   # private
 
   def build_images
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
     if !image_2to1.attached?
       Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING 2to1 ------\n").red
       StatementCreateTwoToOneImageWorker.perform_async(hashid, content)
@@ -134,7 +137,11 @@ class Statement < ApplicationRecord
       Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING SQUARE ------\n").red
       StatementCreateSquareImageWorker.perform_async(hashid, content)
     end
-
+    if !image_facebook.attached?
+      Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING FACEBOOK ------\n").red
+      StatementCreateFacebookImageWorker.perform_async(hashid, content)
+    end
+    Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
 
   def self.rebuild_images!
@@ -147,6 +154,10 @@ class Statement < ApplicationRecord
       if !statement.image_square.attached?
         Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING SQUARE ------\n").red
         StatementCreateSquareImageWorker.perform_async(statement.hashid, statement.content)
+      end
+      if !statement.image_facebook.attached?
+        Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} MISSING FACEBOOK ------\n").red
+        StatementCreateFacebookImageWorker.perform_async(statement.hashid, statement.content)
       end
     end
     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred

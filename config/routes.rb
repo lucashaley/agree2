@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get :image_square
       get :graph
       get :image_graph
+      get :image_facebook
     end
     resources :reports, only: [:create]
   end
