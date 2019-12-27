@@ -20,8 +20,3 @@
 
 // require chartkick
 // require Chart.bundle
-
-$(document).on('click', 'a[data-popup]', function(e) {
-  window.open( $(this).attr('href'), "Popup", "height=400, width=300" );
-  e.preventDefault();
-});
