@@ -98,6 +98,8 @@ gem 'mail_form'
 gem 'dotenv-rails', groups: [:development, :test]
 # https://github.com/glejeune/Ruby-Graphviz
 gem 'ruby-graphviz'
+# https://github.com/Bunlong/rails-social-share-button
+gem 'rails-social-share-button'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -119,8 +121,6 @@ group :development do
   gem "lograge"
   # https://github.com/sickill/rainbow
   gem "rainbow"
-  # https://github.com/Bunlong/rails-social-share-button
-  gem 'rails-social-share-button'
 end
 
 group :test do
