@@ -1,0 +1,10 @@
+
+<%= link_to "http://www.facebook.com/share.php?u=#{request.original_url}", 'data-popup' => true, class: 'btn btn-info btn-lg' do %>
+  <i class="fa fa-facebook-official"></i>
+<% end %>
+<%= link_to "https://twitter.com/share?ref_src=twsrc%5Etfw", 'data-popup'=>true, class: 'btn btn-info btn-lg twitter-share-button', 'data-text'=>'And 10 people agree with me', 'data-url'=>request.original_url, 'data-via'=>"weagreethat" do %>
+  <i class="fa fa-twitter"></i>
+<% end %>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="And 10 people agree with me." data-url="http://www.urlurlurl.com" data-via="weagreethat" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

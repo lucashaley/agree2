@@ -119,6 +119,8 @@ group :development do
   gem "lograge"
   # https://github.com/sickill/rainbow
   gem "rainbow"
+  # https://github.com/Bunlong/rails-social-share-button
+  gem 'rails-social-share-button'
 end
 
 group :test do

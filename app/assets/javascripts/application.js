@@ -15,6 +15,7 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require fingerprint2
+//= require rails-social-share-button
 //= require_tree .
 
 // require chartkick

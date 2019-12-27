@@ -40,3 +40,14 @@ h2, .h2 {
   margin-bottom: 1.0em !important;
   color: #888;
 }
+
+$share_size: 50px;
+
+.rails-social-share-button {
+  display: inline-block;
+  .ssb-icon {
+    background-size: $share_size $share_size;
+    height: $share_size;
+    width: $share_size;
+  }
+}
