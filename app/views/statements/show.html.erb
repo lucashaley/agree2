@@ -10,7 +10,7 @@
 <meta property="twitter:creator" content="@WeAgreeThat" />
 <meta property="twitter:title" content="I agree that…" />
 <meta property="twitter:description" content="<%= full_statement(@statement.content) %>" />
-<meta property="twitter:image" content="<%= polymorphic_url(@statement.image_2to1) if @statement.image_2to1.attached? %>" />
+<meta property="twitter:image" content="<%= polymorphic_url(@statement.image_facebook) if @statement.image_facebook.attached? %>" />
 <% end %>
 
 <div class="jumbotron">
