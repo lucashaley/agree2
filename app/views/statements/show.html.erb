@@ -59,7 +59,7 @@
       </div>
       <div class="col-xs-6 text-right">
         <!--
-        <%= link_to 'ImageGraph', image_graph_statement_path(:format => :png) if @statement.image_graph.attached? %>
+        <%= link_to_if @statement.image_graph.attached?, 'ImageGraph', image_graph_statement_path(:format => :png) %>
         <%= link_to 'Graph', graph_statement_path(:format => :dot) if @statement.graph.attached? %>
         <%= link_to 'Square', image_square_statement_path(:format => :png) if @statement.image_square.attached? %>
         <%= link_to '2:1', image_2to1_statement_path(:format => :png) if @statement.image_2to1.attached? %>
