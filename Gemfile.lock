@@ -220,7 +220,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     nio4r (2.5.2)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     os (1.0.1)
     parallel (1.19.1)
@@ -228,7 +228,7 @@ GEM
       ast (~> 2.4.0)
     pg (1.2.0)
     public_suffix (4.0.1)
-    puma (3.12.2)
+    puma (3.12.4)
     rack (2.0.8)
     rack-protection (2.0.7)
       rack
@@ -398,7 +398,7 @@ DEPENDENCIES
   mail_form
   mini_magick
   pg (>= 0.18, < 2.0)
-  puma (~> 3.11)
+  puma (~> 3.12)
   rails (~> 5.2.3)
   rails-erd
   rails-social-share-button
