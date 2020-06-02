@@ -35,6 +35,8 @@ class Statement < ApplicationRecord
   # Scopes
   scope :recent, -> { order(:created_at).reverse_order }
   scope :top, -> { order(:agree_count).reverse_order }
+  # scope :voted_statements, ->(voter_id) {  }
+  # scope :descendant_count, -> { order(:descendants.count).reverse_order}
 
   ASPECTS = {
     "square"  => "880x880",
@@ -97,6 +99,10 @@ class Statement < ApplicationRecord
     self.descendants.find { |descendant|
       voter.voted_for?(descendant)
     }
+  end
+
+  def descendant_count
+    self.descendants.count
   end
 
   def to_digraph_label

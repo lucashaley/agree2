@@ -65,7 +65,7 @@
         <%= link_to '2:1', image_2to1_statement_path(:format => :png) if @statement.image_2to1.attached? %>
         <%= link_to 'Facebook', image_facebook_statement_path(:format => :png) if @statement.image_facebook.attached? %>
         -->
-        <%= rails_social_share_button_tag("And #{@statement.votes_for} people agree with me.", desc: "And #{@statement.votes_for} people agree with me.") %>
+        <%= rails_social_share_button_tag("And #{@statement.plusminus} people agree with me.", desc: "And #{@statement.votes_for} people agree with me.", via: 'weagreethat') %>
       </div>
     </div>
   </div>

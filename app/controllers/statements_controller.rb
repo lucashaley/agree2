@@ -43,6 +43,7 @@ class StatementsController < ApplicationController
     @tags = Statement.tag_counts_on(:tags)
     @top_ten = Statement.top.limit(10).includes(:votes)
     @most_recent = Statement.recent.limit(10).includes(:votes)
+    # @most_variations = Statement.roots.
 
     Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} STOP ------\n").indianred
   end
@@ -284,7 +285,7 @@ class StatementsController < ApplicationController
       Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} START ------\n").green
 
     # redirect_to @statement.image_square if @statement.image_square.attached?
-    if @statement.image_square.attached?
+    if @statement.image_2to1.attached?
       Rails.logger.debug Rainbow("\n\n-- #{self.class}:#{(__method__)} IMAGE ATTACHED ------\n").green
       redirect_to @statement.image_2to1
     else
@@ -458,7 +459,8 @@ class StatementsController < ApplicationController
 
     respond_to do |format|
       if @statement.save
-        current_voter.vote_for(@statement)
+        # current_voter.vote_for(@statement)
+        current_voter.vote_for_statement(@statement)
         @statement.update_agree_count
 
         # create images
