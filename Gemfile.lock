@@ -104,7 +104,7 @@ GEM
     crass (1.0.6)
     declarative (0.0.10)
     declarative-option (0.1.0)
-    diffy (3.3.0)
+    diffy (3.4.1)
     digest-crc (0.5.1)
     dotenv (2.7.5)
     dotenv-rails (2.7.5)
@@ -388,7 +388,7 @@ DEPENDENCIES
   chromedriver-helper
   closure_tree
   coffee-rails (~> 4.2)
-  diffy (~> 3.3.0)
+  diffy (~> 3.4.1)
   dotenv-rails
   fingerprintjs2-rails!
   google-cloud-language

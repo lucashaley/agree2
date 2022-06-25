@@ -39,7 +39,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Add diff functionality
 # https://github.com/samg/diffy
-gem 'diffy', '~> 3.3.0'
+gem 'diffy', '~> 3.4.1'
 # Add fuzzy string match functionality
 gem 'jaro_winkler', '~> 1.5.1'
 # acts_as_tree or ancestry alternative
