@@ -89,3 +89,7 @@ test:
 #   username: <%= ENV['AGREE_HEROKU_USER'] %>
 #   password: <%= ENV['AGREE_HEROKU_PASSWORD'] %>
 #   host: <%= ENV['AGREE_HEROKU_HOST'] %>
+
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
