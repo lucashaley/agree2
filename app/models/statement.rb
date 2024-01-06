@@ -5,6 +5,11 @@ class Statement < ApplicationRecord
   acts_as_taggable
   acts_as_voteable
 
+  # Ransack
+  def self.ransackable_attributes(auth_object = nil)
+    ["agree_count", "author_id", "content", "created_at", "id", "id_value", "parent_id", "updated_at"]
+  end
+
   # Includes
   # https://github.com/jcypret/hashid-rails
   include Hashid::Rails
